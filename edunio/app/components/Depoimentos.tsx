@@ -6,7 +6,7 @@ export default function Depoimentos() {
     {
       id: 1,
       name: "João Silva",
-      avatar: "https://randomuser.me/api/portraits/men/1.jpg",
+      avatar: "/images/testimonials/men1.jpg",
       role: "Estudante de Engenharia",
       quote:
         "A Edunio me ajudou a entender conceitos complexos de matemática de forma clara e prática. Recomendo!",
@@ -15,7 +15,7 @@ export default function Depoimentos() {
     {
       id: 2,
       name: "Maria Oliveira",
-      avatar: "https://randomuser.me/api/portraits/women/2.jpg",
+      avatar: "/images/testimonials/women2.jpg",
       role: "Estudante de Programação",
       quote:
         "Os mentores são incríveis! Aprendi JavaScript em poucas semanas graças às aulas personalizadas.",
@@ -24,7 +24,7 @@ export default function Depoimentos() {
     {
       id: 3,
       name: "Pedro Santos",
-      avatar: "https://randomuser.me/api/portraits/men/3.jpg",
+      avatar: "/images/testimonials/men3.jpg",
       role: "Estudante de Design",
       quote:
         "Encontrei mentores especializados que me guiaram no meu projeto final. Experiência excepcional!",
