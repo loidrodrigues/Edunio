@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function Nav() {
   return (
-    <nav className="bg-blue-900 text-white">
+    <nav className="bg-white text-gray-900 shadow-md">
       <div className="flex justify-between items-center p-6 px-12">
         <div>
           <h1 className="text-3xl font-extrabold">
@@ -36,12 +36,18 @@ export default function Nav() {
           </li>
         </ul>
         <div className="space-x-4">
-          <button className=" text-white px-4 py-2 rounded cursor-pointer hover:text-amber-500 transition-all duration-300 ">
+          <Link
+            href="/login"
+            className=" text-blue-900 px-4 py-2 rounded cursor-pointer hover:text-amber-500 transition-all duration-300 "
+          >
             Entrar
-          </button>
-          <button className=" bg-white text-blue-900 hover:text-amber-500 px-4 py-2 rounded cursor-pointer transition-all duration-300 ">
+          </Link>
+          <Link
+            href="/cadastro"
+            className=" bg-blue-900 text-white hover:text-amber-500 px-4 py-2 rounded cursor-pointer transition-all duration-300 "
+          >
             Criar conta
-          </button>
+          </Link>
         </div>
       </div>
     </nav>

@@ -205,7 +205,7 @@ export default function Home() {
       <div>
         <div className="flex flex-col  gap-2 mb-8">
           <h1
-            className="text-4xl w-3/5 font-extrabold text-gray-800 transition-opacity duration-500"
+            className="text-5xl w-3/5 font-extrabold text-gray-800 transition-opacity duration-500"
             style={{ opacity: opacity }}
           >
             {displayedTitle}
@@ -221,7 +221,7 @@ export default function Home() {
       </div>
       {
         /* Categories Section */
-        <div className="gap-4 mt-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
+        <div className="gap-4 mt-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 bg-amber-100/50 p-12 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
           {category.map((cat, index) => (
             <CategoryCard key={index} category={cat} />
           ))}
@@ -266,7 +266,7 @@ export default function Home() {
           de forma prática e personalizada.
         </p>
         <button className="mt-4 bg-amber-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-amber-600 transition-colors shadow-md">
-          Criar conta
+          <a href="/cadastro">Criar conta</a>
         </button>
       </div>
     </div>

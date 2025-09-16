@@ -36,7 +36,7 @@ export default function Depoimentos() {
   ];
 
   return (
-    <div className="mt-20">
+    <div className="mt-20 bg-amber-100/50 p-12 ">
       <div className="flex flex-col gap-2 mb-8">
         <h1 className="text-2xl font-extrabold text-gray-800">
           O que nossos alunos dizem
