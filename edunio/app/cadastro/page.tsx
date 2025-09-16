@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface FormData {
   name: string;
@@ -47,6 +48,8 @@ export default function Register() {
     },
   });
 
+  const router = useRouter();
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -77,6 +80,33 @@ export default function Register() {
 
     const data = await res.json();
     alert(data.message);
+
+    if (data.success) {
+      router.push("/login");
+    }
+
+    // Limpa o formulário
+    setForm({
+      name: "",
+      email: "",
+      password: "",
+      isMentor: false,
+      avatar: "",
+      subjects: "",
+      description: "",
+      education: "",
+      experience: "",
+      pricePerHour: "",
+      availability: {
+        monday: "",
+        tuesday: "",
+        wednesday: "",
+        thursday: "",
+        friday: "",
+        saturday: "",
+        sunday: "",
+      },
+    });
   };
 
   return (

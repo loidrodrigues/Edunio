@@ -1,10 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -14,7 +16,10 @@ export default function Login() {
       body: JSON.stringify({ email, password }),
     });
     const data = await res.json();
-    alert(data.message);
+
+    if (data.success) {
+      router.push("/");
+    }
   };
 
   return (
