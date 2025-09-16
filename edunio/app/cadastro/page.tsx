@@ -48,6 +48,9 @@ export default function Register() {
     },
   });
 
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
   const router = useRouter();
 
   const handleChange = (
@@ -71,42 +74,50 @@ export default function Register() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Envia os dados para sua API
-    const res = await fetch("/api/cadastro", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
-    });
+    setLoading(true);
+    setError("");
 
-    const data = await res.json();
-    alert(data.message);
+    try {
+      const res = await fetch("/api/cadastro", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
 
-    if (data.success) {
-      router.push("/login");
+      const data = await res.json();
+
+      if (data.success) {
+        alert(data.message);
+        router.push("/login");
+        setForm({
+          name: "",
+          email: "",
+          password: "",
+          isMentor: false,
+          avatar: "",
+          subjects: "",
+          description: "",
+          education: "",
+          experience: "",
+          pricePerHour: "",
+          availability: {
+            monday: "",
+            tuesday: "",
+            wednesday: "",
+            thursday: "",
+            friday: "",
+            saturday: "",
+            sunday: "",
+          },
+        });
+      } else {
+        setError(data.message || "Erro no cadastro");
+      }
+    } catch (error: any) {
+      setError(error.message || "Erro no cadastro");
+    } finally {
+      setLoading(false);
     }
-
-    // Limpa o formulário
-    setForm({
-      name: "",
-      email: "",
-      password: "",
-      isMentor: false,
-      avatar: "",
-      subjects: "",
-      description: "",
-      education: "",
-      experience: "",
-      pricePerHour: "",
-      availability: {
-        monday: "",
-        tuesday: "",
-        wednesday: "",
-        thursday: "",
-        friday: "",
-        saturday: "",
-        sunday: "",
-      },
-    });
   };
 
   return (
@@ -124,6 +135,7 @@ export default function Register() {
           Crie sua{" "}
           <span className="text-amber-500 italic font-light">conta</span>.
         </h2>
+        {error && <p className="text-red-500 mb-4">{error}</p>}
 
         {/* Nome */}
         <div className="flex flex-col gap-2 mb-3">
@@ -136,6 +148,7 @@ export default function Register() {
             onChange={handleChange}
             className="w-full p-2 border border-gray-300 rounded"
             required
+            disabled={loading}
           />
         </div>
 
@@ -150,6 +163,7 @@ export default function Register() {
             onChange={handleChange}
             className="w-full p-2 border border-gray-300 rounded"
             required
+            disabled={loading}
           />
         </div>
 
@@ -164,6 +178,7 @@ export default function Register() {
             onChange={handleChange}
             className="w-full p-2 border border-gray-300 rounded"
             required
+            disabled={loading}
           />
         </div>
 
@@ -175,6 +190,7 @@ export default function Register() {
             checked={form.isMentor}
             onChange={handleChange}
             className="w-4 h-4"
+            disabled={loading}
           />
           <label htmlFor="isMentor">Quero me cadastrar como Mentor</label>
         </div>
@@ -195,6 +211,7 @@ export default function Register() {
                 value={form.avatar}
                 onChange={handleChange}
                 className="w-full p-2 border border-gray-300 rounded"
+                disabled={loading}
               />
             </div>
 
@@ -207,6 +224,7 @@ export default function Register() {
                 value={form.subjects}
                 onChange={handleChange}
                 className="w-full p-2 border border-gray-300 rounded"
+                disabled={loading}
               />
             </div>
 
@@ -219,6 +237,7 @@ export default function Register() {
                 onChange={handleChange}
                 className="w-full p-2 border border-gray-300 rounded"
                 rows={3}
+                disabled={loading}
               />
             </div>
 
@@ -231,6 +250,7 @@ export default function Register() {
                 value={form.education}
                 onChange={handleChange}
                 className="w-full p-2 border border-gray-300 rounded"
+                disabled={loading}
               />
             </div>
 
@@ -243,6 +263,7 @@ export default function Register() {
                 value={form.experience}
                 onChange={handleChange}
                 className="w-full p-2 border border-gray-300 rounded"
+                disabled={loading}
               />
             </div>
 
@@ -255,6 +276,7 @@ export default function Register() {
                 value={form.pricePerHour}
                 onChange={handleChange}
                 className="w-full p-2 border border-gray-300 rounded"
+                disabled={loading}
               />
             </div>
 
@@ -268,6 +290,7 @@ export default function Register() {
                   value={form.availability.monday}
                   onChange={handleChange}
                   className="p-2 border border-gray-300 rounded"
+                  disabled={loading}
                 />
                 <input
                   type="text"
@@ -276,6 +299,7 @@ export default function Register() {
                   value={form.availability.tuesday}
                   onChange={handleChange}
                   className="p-2 border border-gray-300 rounded"
+                  disabled={loading}
                 />
                 <input
                   type="text"
@@ -284,6 +308,7 @@ export default function Register() {
                   value={form.availability.wednesday}
                   onChange={handleChange}
                   className="p-2 border border-gray-300 rounded"
+                  disabled={loading}
                 />
                 <input
                   type="text"
@@ -292,6 +317,7 @@ export default function Register() {
                   value={form.availability.thursday}
                   onChange={handleChange}
                   className="p-2 border border-gray-300 rounded"
+                  disabled={loading}
                 />
                 <input
                   type="text"
@@ -300,6 +326,7 @@ export default function Register() {
                   value={form.availability.friday}
                   onChange={handleChange}
                   className="p-2 border border-gray-300 rounded"
+                  disabled={loading}
                 />
                 <input
                   type="text"
@@ -308,6 +335,7 @@ export default function Register() {
                   value={form.availability.saturday}
                   onChange={handleChange}
                   className="p-2 border border-gray-300 rounded"
+                  disabled={loading}
                 />
                 <input
                   type="text"
@@ -316,6 +344,7 @@ export default function Register() {
                   value={form.availability.sunday}
                   onChange={handleChange}
                   className="p-2 border border-gray-300 rounded"
+                  disabled={loading}
                 />
               </div>
             </div>
@@ -326,8 +355,9 @@ export default function Register() {
         <button
           type="submit"
           className="w-full bg-blue-900 text-white p-2 rounded hover:bg-blue-800 transition-colors"
+          disabled={loading}
         >
-          Cadastrar
+          {loading ? "Cadastrando..." : "Cadastrar"}
         </button>
 
         {/* Link login */}

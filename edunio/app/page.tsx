@@ -210,7 +210,7 @@ export default function Home() {
           >
             {displayedTitle}
           </h1>
-          <p>
+          <p className="text-lg text-gray-500 ">
             Na Edunio, você encontra mentores que{" "}
             <span className="text-amber-500 italic font-light">
               ajudam você a evoluir

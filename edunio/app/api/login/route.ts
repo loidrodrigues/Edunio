@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import dbConnect from "../../../lib/mongodb";
 import User from "../../../models/User";
+import { generateToken } from "../../../lib/jwt";
 
 export async function POST(request: NextRequest) {
   try {
@@ -25,9 +26,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Generate JWT token
+    const token = generateToken({ userId: user._id, email: user.email });
+
     return NextResponse.json({
       success: true,
       message: "Login realizado com sucesso",
+      token,
     });
   } catch (error: any) {
     console.error(error);

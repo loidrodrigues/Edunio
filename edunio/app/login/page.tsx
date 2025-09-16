@@ -6,19 +6,37 @@ import { useRouter } from "next/navigation";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const res = await fetch("/api/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
-    const data = await res.json();
 
-    if (data.success) {
-      router.push("/");
+    setLoading(true);
+    setError("");
+
+    try {
+      const res = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        localStorage.setItem("token", data.token);
+        router.push("/");
+        setEmail("");
+        setPassword("");
+      } else {
+        setError(data.message || "Erro no login");
+      }
+    } catch (error: any) {
+      setError(error.message || "Erro no login");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -37,6 +55,7 @@ export default function Login() {
           Entrar na sua{" "}
           <span className="text-amber-500 italic font-light">conta</span>.
         </h2>
+        {error && <p className="text-red-500 mb-4">{error}</p>}
         <div className="flex flex-col gap-2">
           <label htmlFor="email" className="">
             E-mail
@@ -48,6 +67,7 @@ export default function Login() {
             onChange={(e) => setEmail(e.target.value)}
             className="w-full p-2 mb-2 border border-gray-300 rounded"
             required
+            disabled={loading}
           />
         </div>
         <div className="mb-2 flex flex-col gap-2">
@@ -59,6 +79,7 @@ export default function Login() {
             onChange={(e) => setPassword(e.target.value)}
             className="w-full p-2 mb-4 border border-gray-300 rounded"
             required
+            disabled={loading}
           />
         </div>
         <div>
@@ -73,8 +94,9 @@ export default function Login() {
         <button
           type="submit"
           className="w-full bg-blue-900 text-white p-2 rounded hover:bg-blue-800 transition-colors"
+          disabled={loading}
         >
-          Entrar
+          {loading ? "Entrando..." : "Entrar"}
         </button>
         <div>
           <p className="mt-4 text-center text-gray-600">
