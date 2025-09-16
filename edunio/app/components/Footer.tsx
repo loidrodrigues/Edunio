@@ -10,7 +10,7 @@ import {
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-900 text-white py-12 mt-12">
+    <footer className="bg-blue-900 text-white py-12 mt-12">
       <div className="container mx-auto px-4">
         {/* Top Section */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
@@ -76,7 +76,7 @@ export default function Footer() {
               </div>
               <div className="flex items-center">
                 <MapPin className="w-4 h-4 mr-2" />
-                <span>Lisboa, Portugal</span>
+                <span>Santa catarina, Angola</span>
               </div>
             </div>
           </div>
@@ -117,33 +117,8 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Newsletter Section */}
-        <div className="border-t border-gray-700 pt-8 mb-8">
-          <div className="max-w-md mx-auto text-center">
-            <h4 className="text-lg font-semibold mb-4">Newsletter</h4>
-            <p className="text-gray-300 text-sm mb-4">
-              Receba as últimas novidades e atualizações diretamente no seu
-              email.
-            </p>
-            <form className="flex flex-col sm:flex-row gap-2">
-              <input
-                type="email"
-                placeholder="Seu email"
-                className="flex-1 px-4 py-2 bg-gray-800 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              />
-              <button
-                type="submit"
-                className="px-6 py-2 bg-blue-600 hover:bg-blue-700 rounded-md font-medium transition-colors"
-              >
-                Inscrever-se
-              </button>
-            </form>
-          </div>
-        </div>
-
         {/* Bottom Section */}
-        <div className="border-t border-gray-700 pt-8 text-center">
+        <div className="border-t border-gray-300 pt-8 text-center">
           <p className="text-sm text-gray-400">
             &copy; {new Date().getFullYear()} Edunio. Todos os direitos
             reservados.

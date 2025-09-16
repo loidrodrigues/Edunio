@@ -11,7 +11,7 @@ export default function MonitorCard({ monitor }: any) {
           alt={monitor.name}
           width={60}
           height={60}
-          className="rounded-full border-2 border-blue-600"
+          className="rounded-full border-2 border-gray-900"
         />
         <div className="flex flex-col">
           <h3 className="text-lg font-bold text-gray-800">{monitor.name}</h3>
@@ -42,7 +42,7 @@ export default function MonitorCard({ monitor }: any) {
       </div>
 
       {/* Botão */}
-      <button className="mt-4 w-full bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition-colors">
+      <button className="mt-4 w-full bg-blue-900 text-white p-2 rounded-lg hover:bg-blue-800 cursor-pointer transition-colors">
         Ver Detalhes
       </button>
     </div>

@@ -1,4 +1,7 @@
+"use client";
+
 import Image from "next/image";
+import { useState, useEffect } from "react";
 import CategoryCard from "./components/CategoryCard";
 import {
   Code,
@@ -17,6 +20,9 @@ import {
 import Search from "./components/Search";
 import MonitorCard from "./components/MonitorCard";
 import CallAction from "./components/CallAction";
+import Beneficio from "./components/Beneficio";
+import CallToActionStudent from "./components/CallToActionStudent";
+import Depoimentos from "./components/Depoimentos";
 
 export default function Home() {
   const monitors = [
@@ -167,15 +173,47 @@ export default function Home() {
       icon: Camera,
     },
   ];
+
+  const titles = [
+    "Aprenda com quem entende do assunto que você deseja dominar",
+    "Descubra mentores especializados no que você quer aprender",
+    "Evolua com especialistas no seu campo de interesse",
+  ];
+
+  const [currentTitleIndex, setCurrentTitleIndex] = useState(0);
+  const [displayedTitle, setDisplayedTitle] = useState(titles[0]);
+  const [opacity, setOpacity] = useState(1);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setOpacity(0);
+      setTimeout(() => {
+        setCurrentTitleIndex((prev) => {
+          const nextIndex = (prev + 1) % titles.length;
+          setDisplayedTitle(titles[nextIndex]);
+          return nextIndex;
+        });
+        setOpacity(1);
+      }, 500);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <div className="flex flex-col  justify-between p-24  ">
-      <div className="flex flex-col  gap-2">
-        <h1 className="text-4xl w-3/5 font-extrabold text-gray-800">
-          Aprenda com quem entende do assunto que você deseja dominar
+    <div className="flex flex-col  justify-between px-28 py-24  ">
+      <div className="flex flex-col  gap-2 mb-8">
+        <h1
+          className="text-4xl w-3/5 font-extrabold text-gray-800 transition-opacity duration-500"
+          style={{ opacity: opacity }}
+        >
+          {displayedTitle}
         </h1>
         <p>
-          Na Edunio, você encontra mentores que ajudam você a evoluir no seu
-          ritmo.
+          Na Edunio, você encontra mentores que{" "}
+          <span className="text-amber-500 italic font-light">
+            ajudam você a evoluir
+          </span>{" "}
+          no seu ritmo.
         </p>
       </div>
       {
@@ -186,14 +224,21 @@ export default function Home() {
           ))}
         </div>
       }
+
       <Search />
-      <div className="flex flex-col mt-12 gap-1">
-        <h1 className="text-lg font-extrabold text-gray-800">
-          Encontre um mentor
-        </h1>
-        <p className="text-sm text-gray-500">
-          Veja os monitores disponíveis na plataforma
-        </p>
+      <div className=" flex justify-between mt-20 items-center ">
+        <div className="flex flex-col  gap-1">
+          <h1 className="text-2xl font-extrabold text-gray-800">
+            Encontre um{" "}
+            <span className="text-amber-500 italic font-light">mentor</span>
+          </h1>
+          <p className="text-lg text-gray-500">
+            Veja os monitores disponíveis na plataforma
+          </p>
+        </div>
+        <button className="text-white  px-3 py-2 rounded-md  bg-blue-900">
+          ver todos
+        </button>
       </div>
       <div className="bg-gray-100  p-6 mt-12">
         {/* Monitor Cards Section */}
@@ -203,7 +248,24 @@ export default function Home() {
           ))}
         </section>
       </div>
+
       <CallAction />
+      <Beneficio />
+      <CallToActionStudent />
+      <Depoimentos />
+      <div className="  mb-2 mt-24">
+        <h1 className="text-xl md:text-2xl mb-2 font-extrabold text-gray-800">
+          Vem com a{" "}
+          <span className="text-amber-500 italic font-light">Edunio</span>
+        </h1>
+        <p className="text-lg md:text-xl text-gray-600 max-w-2xl">
+          Aprenda com quem realmente entende do assunto e alcance seus objetivos
+          de forma prática e personalizada.
+        </p>
+        <button className="mt-4 bg-amber-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-amber-600 transition-colors shadow-md">
+          Criar conta
+        </button>
+      </div>
     </div>
   );
 }
