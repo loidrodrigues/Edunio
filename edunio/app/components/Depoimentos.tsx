@@ -6,7 +6,8 @@ export default function Depoimentos() {
     {
       id: 1,
       name: "João Silva",
-      avatar: "https://randomuser.me/api/portraits/men/1.jpg",
+      avatar:
+        "https://storage.alboom.ninja/sites/1348/albuns/956272/retrato_corporativo___retrato_profissional___diego_rocha_fotografo___foto_de_perfil_profissional___retrato_para_linkedin__030.jpg?t=1643996070",
       role: "Estudante de Engenharia",
       quote:
         "A Edunio me ajudou a entender conceitos complexos de matemática de forma clara e prática. Recomendo!",
@@ -15,7 +16,8 @@ export default function Depoimentos() {
     {
       id: 2,
       name: "Maria Oliveira",
-      avatar: "https://randomuser.me/api/portraits/women/2.jpg",
+      avatar:
+        "https://evorastudio.com.br/wp-content/uploads/2021/04/retrato-corporativo-foto-perfil-profissional-foto-linkedin-24-scaled.jpg",
       role: "Estudante de Programação",
       quote:
         "Os mentores são incríveis! Aprendi JavaScript em poucas semanas graças às aulas personalizadas.",
@@ -24,7 +26,8 @@ export default function Depoimentos() {
     {
       id: 3,
       name: "Pedro Santos",
-      avatar: "https://randomuser.me/api/portraits/men/3.jpg",
+      avatar:
+        "https://93cf30e14ffe27bbc170-56f4a41899529a041b24911e6894a309.ssl.cf1.rackcdn.com/store54/produtos/4759/retrato-perfil-profissional-pacote-10-fotos-20241009-172129-294.jpg",
       role: "Estudante de Design",
       quote:
         "Encontrei mentores especializados que me guiaram no meu projeto final. Experiência excepcional!",
