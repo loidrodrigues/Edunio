@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { Star, Book, Clock } from "lucide-react";
 
 export default function MonitorCard({ monitor }: any) {
@@ -42,9 +43,11 @@ export default function MonitorCard({ monitor }: any) {
       </div>
 
       {/* Botão */}
-      <button className="mt-4 w-full bg-blue-900 text-white p-2 rounded-lg hover:bg-blue-800 cursor-pointer transition-colors">
-        Ver Detalhes
-      </button>
+      <Link href={`/mentor/${monitor.id}`}>
+        <button className="mt-4 w-full bg-blue-900 text-white p-2 rounded-lg hover:bg-blue-800 cursor-pointer transition-colors">
+          Ver Detalhes
+        </button>
+      </Link>
     </div>
   );
 }
