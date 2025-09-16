@@ -17,6 +17,7 @@ import {
   Globe,
   Music,
   Camera,
+  MoveRight,
 } from "lucide-react";
 import Search from "./components/Search";
 import MonitorCard from "./components/MonitorCard";
@@ -178,7 +179,7 @@ export default function Home() {
   const titles = [
     "Aprenda com quem entende do assunto que você deseja dominar",
     "Descubra mentores especializados no que você quer aprender",
-    "Evolua com especialistas no seu campo de interesse",
+    "Evolua com especialistas no campo que você deseja se destacar",
   ];
 
   const [currentTitleIndex, setCurrentTitleIndex] = useState(0);
@@ -217,6 +218,14 @@ export default function Home() {
             </span>{" "}
             no seu ritmo.
           </p>
+          <div className="mt-4 flex gap-4">
+            <button className="bg-amber-500 text-white font-semibold flex gap-2 cursor-pointer px-4 py-3 rounded-lg hover:bg-amber-600 transition-colors">
+              <MoveRight /> Ser um monitor
+            </button>
+            <button className="text-md font-semibold cursor-pointer px-4 py-3 hover:text-amber-500 transition-colors">
+              Seja um aluno
+            </button>
+          </div>
         </div>
       </div>
       {
