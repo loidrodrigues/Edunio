@@ -18,6 +18,7 @@ export const metadata: Metadata = {
 };
 
 import Nav from "./components/Nav";
+import Footer from "./components/Footer";
 
 export default function RootLayout({
   children,
@@ -31,6 +32,7 @@ export default function RootLayout({
       >
         <Nav />
         {children}
+        <Footer />
       </body>
     </html>
   );

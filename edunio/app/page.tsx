@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import Search from "./components/Search";
 import MonitorCard from "./components/MonitorCard";
+import CallAction from "./components/CallAction";
 
 export default function Home() {
   const monitors = [
@@ -202,6 +203,7 @@ export default function Home() {
           ))}
         </section>
       </div>
+      <CallAction />
     </div>
   );
 }
