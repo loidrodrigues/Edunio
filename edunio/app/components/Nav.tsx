@@ -3,7 +3,7 @@ import Link from "next/link";
 export default function Nav() {
   return (
     <nav className="bg-blue-900 text-white">
-      <div className="flex justify-between items-center p-8">
+      <div className="flex justify-between items-center p-6 px-12">
         <div>
           <h1 className="text-3xl font-extrabold">
             Edu
@@ -35,7 +35,14 @@ export default function Nav() {
             </Link>
           </li>
         </ul>
-        <button>Entrar</button>
+        <div className="space-x-4">
+          <button className=" text-white px-4 py-2 rounded cursor-pointer hover:text-amber-500 transition-all duration-300 ">
+            Entrar
+          </button>
+          <button className=" bg-white text-blue-900 hover:text-amber-500 px-4 py-2 rounded cursor-pointer transition-all duration-300 ">
+            Criar conta
+          </button>
+        </div>
       </div>
     </nav>
   );

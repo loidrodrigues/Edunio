@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import CategoryCard from "./components/CategoryCard";
+
 import {
   Code,
   Palette,
@@ -201,20 +202,22 @@ export default function Home() {
 
   return (
     <div className="flex flex-col  justify-between px-28 py-24  ">
-      <div className="flex flex-col  gap-2 mb-8">
-        <h1
-          className="text-4xl w-3/5 font-extrabold text-gray-800 transition-opacity duration-500"
-          style={{ opacity: opacity }}
-        >
-          {displayedTitle}
-        </h1>
-        <p>
-          Na Edunio, você encontra mentores que{" "}
-          <span className="text-amber-500 italic font-light">
-            ajudam você a evoluir
-          </span>{" "}
-          no seu ritmo.
-        </p>
+      <div>
+        <div className="flex flex-col  gap-2 mb-8">
+          <h1
+            className="text-4xl w-3/5 font-extrabold text-gray-800 transition-opacity duration-500"
+            style={{ opacity: opacity }}
+          >
+            {displayedTitle}
+          </h1>
+          <p>
+            Na Edunio, você encontra mentores que{" "}
+            <span className="text-amber-500 italic font-light">
+              ajudam você a evoluir
+            </span>{" "}
+            no seu ritmo.
+          </p>
+        </div>
       </div>
       {
         /* Categories Section */
