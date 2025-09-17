@@ -25,6 +25,25 @@ interface FormData {
   };
 }
 
+interface Errors {
+  name: string;
+  email: string;
+  password: string;
+  avatar: string;
+  subjects: string;
+  description: string;
+  education: string;
+  experience: string;
+  pricePerHour: string;
+  monday: string;
+  tuesday: string;
+  wednesday: string;
+  thursday: string;
+  friday: string;
+  saturday: string;
+  sunday: string;
+}
+
 export default function Register() {
   const [form, setForm] = useState<FormData>({
     name: "",
@@ -50,6 +69,24 @@ export default function Register() {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [errors, setErrors] = useState<Errors>({
+    name: "",
+    email: "",
+    password: "",
+    avatar: "",
+    subjects: "",
+    description: "",
+    education: "",
+    experience: "",
+    pricePerHour: "",
+    monday: "",
+    tuesday: "",
+    wednesday: "",
+    thursday: "",
+    friday: "",
+    saturday: "",
+    sunday: "",
+  });
 
   const router = useRouter();
 
@@ -63,16 +100,87 @@ export default function Register() {
         ...form,
         availability: { ...form.availability, [day]: value },
       });
+      setErrors({ ...errors, [day]: "" });
     } else {
       setForm({
         ...form,
         [name]: type === "checkbox" ? checked : value,
       });
+      setErrors({ ...errors, [name]: "" });
     }
+  };
+
+  const validate = (): boolean => {
+    const newErrors: Errors = {
+      name: "",
+      email: "",
+      password: "",
+      avatar: "",
+      subjects: "",
+      description: "",
+      education: "",
+      experience: "",
+      pricePerHour: "",
+      monday: "",
+      tuesday: "",
+      wednesday: "",
+      thursday: "",
+      friday: "",
+      saturday: "",
+      sunday: "",
+    };
+
+    if (!form.name.trim()) newErrors.name = "Este campo é obrigatório";
+    if (!form.email.trim()) newErrors.email = "Este campo é obrigatório";
+    else if (!/\S+@\S+\.\S+/.test(form.email))
+      newErrors.email = "E-mail inválido";
+    if (!form.password) newErrors.password = "Este campo é obrigatório";
+    else if (form.password.length < 6)
+      newErrors.password = "A senha deve ter pelo menos 6 caracteres";
+
+    if (form.isMentor) {
+      if (!form.avatar.trim()) newErrors.avatar = "Este campo é obrigatório";
+      if (!form.subjects.trim())
+        newErrors.subjects = "Este campo é obrigatório";
+      if (!form.description.trim())
+        newErrors.description = "Este campo é obrigatório";
+      if (!form.education.trim())
+        newErrors.education = "Este campo é obrigatório";
+      if (!form.experience.trim())
+        newErrors.experience = "Este campo é obrigatório";
+      if (!form.pricePerHour.trim())
+        newErrors.pricePerHour = "Este campo é obrigatório";
+      else if (
+        isNaN(Number(form.pricePerHour)) ||
+        Number(form.pricePerHour) <= 0
+      )
+        newErrors.pricePerHour = "Preço deve ser um número positivo";
+      // For availability, maybe check if at least one is filled, but for simplicity, leave optional or require all?
+      // To keep simple, make them required if mentor
+      if (!form.availability.monday.trim())
+        newErrors.monday = "Este campo é obrigatório";
+      if (!form.availability.tuesday.trim())
+        newErrors.tuesday = "Este campo é obrigatório";
+      if (!form.availability.wednesday.trim())
+        newErrors.wednesday = "Este campo é obrigatório";
+      if (!form.availability.thursday.trim())
+        newErrors.thursday = "Este campo é obrigatório";
+      if (!form.availability.friday.trim())
+        newErrors.friday = "Este campo é obrigatório";
+      if (!form.availability.saturday.trim())
+        newErrors.saturday = "Este campo é obrigatório";
+      if (!form.availability.sunday.trim())
+        newErrors.sunday = "Este campo é obrigatório";
+    }
+
+    setErrors(newErrors);
+    return Object.values(newErrors).every((error) => error === "");
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!validate()) return;
 
     setLoading(true);
     setError("");
@@ -147,9 +255,9 @@ export default function Register() {
             value={form.name}
             onChange={handleChange}
             className="w-full p-2 border border-gray-300 rounded"
-            required
             disabled={loading}
           />
+          {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
         </div>
 
         {/* Email */}
@@ -162,9 +270,11 @@ export default function Register() {
             value={form.email}
             onChange={handleChange}
             className="w-full p-2 border border-gray-300 rounded"
-            required
             disabled={loading}
           />
+          {errors.email && (
+            <p className="text-red-500 text-sm">{errors.email}</p>
+          )}
         </div>
 
         {/* Senha */}
@@ -177,9 +287,11 @@ export default function Register() {
             value={form.password}
             onChange={handleChange}
             className="w-full p-2 border border-gray-300 rounded"
-            required
             disabled={loading}
           />
+          {errors.password && (
+            <p className="text-red-500 text-sm">{errors.password}</p>
+          )}
         </div>
 
         {/* Checkbox Mentor */}
@@ -213,6 +325,9 @@ export default function Register() {
                 className="w-full p-2 border border-gray-300 rounded"
                 disabled={loading}
               />
+              {errors.avatar && (
+                <p className="text-red-500 text-sm">{errors.avatar}</p>
+              )}
             </div>
 
             <div className="flex flex-col gap-2 mb-3">
@@ -226,6 +341,9 @@ export default function Register() {
                 className="w-full p-2 border border-gray-300 rounded"
                 disabled={loading}
               />
+              {errors.subjects && (
+                <p className="text-red-500 text-sm">{errors.subjects}</p>
+              )}
             </div>
 
             <div className="flex flex-col gap-2 mb-3">
@@ -239,6 +357,9 @@ export default function Register() {
                 rows={3}
                 disabled={loading}
               />
+              {errors.description && (
+                <p className="text-red-500 text-sm">{errors.description}</p>
+              )}
             </div>
 
             <div className="flex flex-col gap-2 mb-3">
@@ -252,6 +373,9 @@ export default function Register() {
                 className="w-full p-2 border border-gray-300 rounded"
                 disabled={loading}
               />
+              {errors.education && (
+                <p className="text-red-500 text-sm">{errors.education}</p>
+              )}
             </div>
 
             <div className="flex flex-col gap-2 mb-3">
@@ -265,6 +389,9 @@ export default function Register() {
                 className="w-full p-2 border border-gray-300 rounded"
                 disabled={loading}
               />
+              {errors.experience && (
+                <p className="text-red-500 text-sm">{errors.experience}</p>
+              )}
             </div>
 
             <div className="flex flex-col gap-2 mb-3">
@@ -278,74 +405,112 @@ export default function Register() {
                 className="w-full p-2 border border-gray-300 rounded"
                 disabled={loading}
               />
+              {errors.pricePerHour && (
+                <p className="text-red-500 text-sm">{errors.pricePerHour}</p>
+              )}
             </div>
 
             <div className="flex flex-col gap-2 mb-3">
               <label>Disponibilidade</label>
               <div className="grid grid-cols-2 gap-2">
-                <input
-                  type="text"
-                  name="availability.monday"
-                  placeholder="Segunda"
-                  value={form.availability.monday}
-                  onChange={handleChange}
-                  className="p-2 border border-gray-300 rounded"
-                  disabled={loading}
-                />
-                <input
-                  type="text"
-                  name="availability.tuesday"
-                  placeholder="Terça"
-                  value={form.availability.tuesday}
-                  onChange={handleChange}
-                  className="p-2 border border-gray-300 rounded"
-                  disabled={loading}
-                />
-                <input
-                  type="text"
-                  name="availability.wednesday"
-                  placeholder="Quarta"
-                  value={form.availability.wednesday}
-                  onChange={handleChange}
-                  className="p-2 border border-gray-300 rounded"
-                  disabled={loading}
-                />
-                <input
-                  type="text"
-                  name="availability.thursday"
-                  placeholder="Quinta"
-                  value={form.availability.thursday}
-                  onChange={handleChange}
-                  className="p-2 border border-gray-300 rounded"
-                  disabled={loading}
-                />
-                <input
-                  type="text"
-                  name="availability.friday"
-                  placeholder="Sexta"
-                  value={form.availability.friday}
-                  onChange={handleChange}
-                  className="p-2 border border-gray-300 rounded"
-                  disabled={loading}
-                />
-                <input
-                  type="text"
-                  name="availability.saturday"
-                  placeholder="Sábado"
-                  value={form.availability.saturday}
-                  onChange={handleChange}
-                  className="p-2 border border-gray-300 rounded"
-                  disabled={loading}
-                />
-                <input
-                  type="text"
-                  name="availability.sunday"
-                  placeholder="Domingo"
-                  value={form.availability.sunday}
-                  onChange={handleChange}
-                  className="p-2 border border-gray-300 rounded"
-                  disabled={loading}
-                />
+                <div className="flex flex-col">
+                  <input
+                    type="text"
+                    name="availability.monday"
+                    placeholder="Segunda"
+                    value={form.availability.monday}
+                    onChange={handleChange}
+                    className="p-2 border border-gray-300 rounded"
+                    disabled={loading}
+                  />
+                  {errors.monday && (
+                    <p className="text-red-500 text-sm">{errors.monday}</p>
+                  )}
+                </div>
+                <div className="flex flex-col">
+                  <input
+                    type="text"
+                    name="availability.tuesday"
+                    placeholder="Terça"
+                    value={form.availability.tuesday}
+                    onChange={handleChange}
+                    className="p-2 border border-gray-300 rounded"
+                    disabled={loading}
+                  />
+                  {errors.tuesday && (
+                    <p className="text-red-500 text-sm">{errors.tuesday}</p>
+                  )}
+                </div>
+                <div className="flex flex-col">
+                  <input
+                    type="text"
+                    name="availability.wednesday"
+                    placeholder="Quarta"
+                    value={form.availability.wednesday}
+                    onChange={handleChange}
+                    className="p-2 border border-gray-300 rounded"
+                    disabled={loading}
+                  />
+                  {errors.wednesday && (
+                    <p className="text-red-500 text-sm">{errors.wednesday}</p>
+                  )}
+                </div>
+                <div className="flex flex-col">
+                  <input
+                    type="text"
+                    name="availability.thursday"
+                    placeholder="Quinta"
+                    value={form.availability.thursday}
+                    onChange={handleChange}
+                    className="p-2 border border-gray-300 rounded"
+                    disabled={loading}
+                  />
+                  {errors.thursday && (
+                    <p className="text-red-500 text-sm">{errors.thursday}</p>
+                  )}
+                </div>
+                <div className="flex flex-col">
+                  <input
+                    type="text"
+                    name="availability.friday"
+                    placeholder="Sexta"
+                    value={form.availability.friday}
+                    onChange={handleChange}
+                    className="p-2 border border-gray-300 rounded"
+                    disabled={loading}
+                  />
+                  {errors.friday && (
+                    <p className="text-red-500 text-sm">{errors.friday}</p>
+                  )}
+                </div>
+                <div className="flex flex-col">
+                  <input
+                    type="text"
+                    name="availability.saturday"
+                    placeholder="Sábado"
+                    value={form.availability.saturday}
+                    onChange={handleChange}
+                    className="p-2 border border-gray-300 rounded"
+                    disabled={loading}
+                  />
+                  {errors.saturday && (
+                    <p className="text-red-500 text-sm">{errors.saturday}</p>
+                  )}
+                </div>
+                <div className="flex flex-col">
+                  <input
+                    type="text"
+                    name="availability.sunday"
+                    placeholder="Domingo"
+                    value={form.availability.sunday}
+                    onChange={handleChange}
+                    className="p-2 border border-gray-300 rounded"
+                    disabled={loading}
+                  />
+                  {errors.sunday && (
+                    <p className="text-red-500 text-sm">{errors.sunday}</p>
+                  )}
+                </div>
               </div>
             </div>
           </div>

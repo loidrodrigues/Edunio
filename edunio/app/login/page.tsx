@@ -3,15 +3,50 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
+interface LoginErrors {
+  email: string;
+  password: string;
+}
+
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [errors, setErrors] = useState<LoginErrors>({
+    email: "",
+    password: "",
+  });
   const router = useRouter();
+
+  const validate = (): boolean => {
+    const newErrors: LoginErrors = {
+      email: "",
+      password: "",
+    };
+
+    if (!email.trim()) newErrors.email = "Este campo é obrigatório";
+    else if (!/\S+@\S+\.\S+/.test(email)) newErrors.email = "E-mail inválido";
+    if (!password) newErrors.password = "Este campo é obrigatório";
+
+    setErrors(newErrors);
+    return Object.values(newErrors).every((error) => error === "");
+  };
+
+  const handleChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+    setErrors({ ...errors, email: "" });
+  };
+
+  const handleChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+    setErrors({ ...errors, password: "" });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!validate()) return;
 
     setLoading(true);
     setError("");
@@ -64,11 +99,13 @@ export default function Login() {
             type="email"
             placeholder="Insira o seu email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={handleChangeEmail}
             className="w-full p-2 mb-2 border border-gray-300 rounded"
-            required
             disabled={loading}
           />
+          {errors.email && (
+            <p className="text-red-500 text-sm">{errors.email}</p>
+          )}
         </div>
         <div className="mb-2 flex flex-col gap-2">
           <label htmlFor="password">Senha</label>
@@ -76,11 +113,13 @@ export default function Login() {
             type="password"
             placeholder="Insira a sua Senha"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={handleChangePassword}
             className="w-full p-2 mb-4 border border-gray-300 rounded"
-            required
             disabled={loading}
           />
+          {errors.password && (
+            <p className="text-red-500 text-sm">{errors.password}</p>
+          )}
         </div>
         <div>
           <a href="#" className="text-sm text-amber-500 ">

@@ -1,6 +1,7 @@
-# TODO: Add Monitor Fields to Cadastro Page
-
-- [ ] Update form state in cadastro/page.tsx to include avatar, education, experience, and change availability to object with days
-- [ ] Update handleChange function to handle nested availability object
-- [ ] Add input fields for avatar, education, experience in the mentor section
-- [ ] Add input fields for each day of the week for availability
+- [x] Criar modelos: LessonRequest.ts, Lesson.ts, Rating.ts
+- [x] Criar componentes: SolicitationCard, LessonCard, RatingForm, ProfileEdit
+- [x] Atualizar app/monitor/dashboard.tsx com três blocos: Perfil, Solicitações, Histórico
+- [x] Criar app/student/page.tsx com seções: Perfil, Solicitações, Aulas Agendadas
+- [x] Criar APIs para CRUD de solicitações, aulas, perfis
+- [x] Integrar autenticação e autorização (verificar isMentor)
+- [ ] Testar funcionalidades

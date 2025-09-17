@@ -22,3 +22,10 @@ export function isLoggedIn() {
   const decoded = verifyToken(token);
   return decoded !== null;
 }
+
+export function getUserFromToken() {
+  if (typeof window === "undefined") return null;
+  const token = localStorage.getItem("token");
+  if (!token) return null;
+  return verifyToken(token) as any; // Assuming payload has user info
+}
