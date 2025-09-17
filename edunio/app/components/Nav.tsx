@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { isLoggedIn } from "../../lib/jwt";
 import { useEffect, useState } from "react";
+import logo from "../../public/logo.png";
 
 export default function Nav() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -16,10 +17,9 @@ export default function Nav() {
     <nav className="bg-white text-gray-900 shadow-md">
       <div className="flex justify-between items-center p-6 px-12">
         <div>
-          <h1 className="text-3xl font-extrabold">
-            Edu
-            <span className="text-amber-500 font-extrabold italic ">nio</span>
-          </h1>
+          <Link href="/">
+            <img src={logo.src} alt="Edunio Logo" className="h-10 w-auto" />
+          </Link>
         </div>
 
         <ul className="flex space-x-4">
