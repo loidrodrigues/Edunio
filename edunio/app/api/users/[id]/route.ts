@@ -4,12 +4,15 @@ import User from "../../../../models/User";
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } | Promise<{ id: string }> }
 ) {
   try {
     await connectMongo();
 
     const updates = await request.json();
+
+    // Await params if it's a Promise
+    const params = await context.params;
     const userId = params.id;
 
     const updatedUser = await User.findByIdAndUpdate(userId, updates, {

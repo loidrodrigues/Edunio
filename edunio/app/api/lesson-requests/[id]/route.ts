@@ -5,12 +5,15 @@ import Lesson from "../../../../models/Lesson";
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } | Promise<{ id: string }> }
 ) {
   try {
     await connectMongo();
 
     const { status } = await request.json();
+
+    // Await params if it's a Promise
+    const params = await context.params;
     const requestId = params.id;
 
     const updatedRequest = await LessonRequest.findByIdAndUpdate(
