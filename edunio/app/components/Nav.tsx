@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { isLoggedIn } from "../../lib/jwt";
 import { useEffect, useState } from "react";
-import logo from "../../public/logo.png";
+import logo from "../../public/logo1.png";
 
 export default function Nav() {
   const [loggedIn, setLoggedIn] = useState(false);
