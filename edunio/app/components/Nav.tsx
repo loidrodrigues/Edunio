@@ -62,7 +62,7 @@ export default function Nav() {
                 href="/monitor/profile"
                 className=" text-blue-900 px-4 py-2 rounded cursor-pointer hover:text-amber-500 transition-all duration-300 "
               >
-                Perfil
+                Dashboard
               </Link>
 
               <button
