@@ -8,95 +8,205 @@ import LessonCard from "../../components/LessonCard";
 import ProfileEdit from "../../components/ProfileEdit";
 import { User, ClipboardList, BookOpen, LogOut } from "lucide-react";
 
-const mockSolicitations = [
-  {
-    id: "1",
-    studentName: "João Silva",
-    studentEmail: "joao@example.com",
-    subject: "Matemática",
-    dateTime: "2024-06-15T10:00:00Z",
-    message: "Preciso de ajuda com álgebra.",
-    status: "pending",
-  },
-  {
-    id: "2",
-    studentName: "Maria Oliveira",
-    studentEmail: "maria@example.com",
-    subject: "Física",
-    dateTime: "2024-06-16T14:00:00Z",
-    message: "Aula de mecânica.",
-    status: "pending",
-  },
-];
+interface Solicitation {
+  id: string;
+  studentName: string;
+  studentEmail: string;
+  subject: string;
+  dateTime: string;
+  message: string;
+  status: string;
+}
 
-const mockLessons = [
-  {
-    id: "1",
-    subject: "Matemática",
-    dateTime: "2024-06-10T10:00:00Z",
-    status: "completed",
-  },
-  {
-    id: "2",
-    subject: "Física",
-    dateTime: "2024-06-20T14:00:00Z",
-    status: "scheduled",
-  },
-];
+interface Lesson {
+  id: string;
+  subject: string;
+  dateTime: string;
+  status: string;
+  meetingLink: string;
+}
 
-const mockUser = {
-  name: "Ricardo Manuel",
-  email: "monitor@example.com",
-  avatar: "/lo.png",
-  subjects: "Matemática, Física",
-  description: "Professor experiente.",
-  education: "Mestrado em Matemática",
-  experience: "10 anos",
-  pricePerHour: "50",
+interface UserProfile {
+  name: string;
+  email: string;
+  avatar: string;
+  subjects: string;
+  description: string;
+  education: string;
+  experience: string;
+  pricePerHour: string;
   availability: {
-    monday: "09:00-17:00",
-    tuesday: "09:00-17:00",
-    wednesday: "09:00-17:00",
-    thursday: "09:00-17:00",
-    friday: "09:00-17:00",
-    saturday: "",
-    sunday: "",
-  },
-};
+    monday: string;
+    tuesday: string;
+    wednesday: string;
+    thursday: string;
+    friday: string;
+    saturday: string;
+    sunday: string;
+  };
+}
 
 export default function MonitorDashboard() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("solicitacoes");
-  const [solicitations, setSolicitations] = useState(mockSolicitations);
-  const [user, setUser] = useState(mockUser);
+  const [solicitations, setSolicitations] = useState<Solicitation[]>([]);
+  const [lessons, setLessons] = useState<Lesson[]>([]);
+  const [user, setUser] = useState<UserProfile | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [editingLink, setEditingLink] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {
-    const user = getUserFromToken();
-    if (!user || !user.isMentor) {
-      router.push("/login");
-    }
+    const fetchData = async () => {
+      try {
+        const tokenUser = getUserFromToken();
+        console.log("Token user:", tokenUser);
+        if (!tokenUser) {
+          console.log("No token user found, redirecting to login");
+          router.push("/login");
+          return;
+        }
+        if (!tokenUser.isMentor) {
+          console.log("User is not a mentor, redirecting to login");
+          router.push("/login");
+          return;
+        }
+
+        const userId = tokenUser.userId;
+        console.log("User ID from token:", userId);
+        if (!userId) {
+          console.error("User ID is undefined in token");
+          setError("User ID not found in token");
+          setLoading(false);
+          return;
+        }
+
+        // Fetch user profile
+        const userResponse = await fetch(`/api/users/${userId}`);
+        console.log("User API response status:", userResponse.status);
+        if (!userResponse.ok) {
+          const errorText = await userResponse.text();
+          console.error("User API error:", errorText);
+          throw new Error("Failed to fetch user profile");
+        }
+        const userData = await userResponse.json();
+        console.log("User data:", userData);
+        setUser(userData);
+
+        // Fetch lesson requests
+        const requestsResponse = await fetch(
+          `/api/lesson-requests?mentorId=${userId}`
+        );
+        if (!requestsResponse.ok)
+          throw new Error("Failed to fetch lesson requests");
+        const requestsData = await requestsResponse.json();
+        const mappedSolicitations = requestsData.map((req: any) => ({
+          id: req._id,
+          studentName: req.student.name,
+          studentEmail: req.student.email,
+          subject: req.subject,
+          dateTime: req.dateTime,
+          message: req.message,
+          status: req.status,
+        }));
+        setSolicitations(mappedSolicitations);
+
+        // Fetch lessons
+        const lessonsResponse = await fetch(
+          `/api/lessons?userId=${userId}&role=mentor`
+        );
+        if (!lessonsResponse.ok) throw new Error("Failed to fetch lessons");
+        const lessonsData = await lessonsResponse.json();
+        setLessons(lessonsData);
+
+        setLoading(false);
+      } catch (err) {
+        setError((err as Error).message);
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, [router]);
 
-  const handleAccept = (id: string) => {
-    setSolicitations(
-      solicitations.map((s) => (s.id === id ? { ...s, status: "accepted" } : s))
-    );
+  const handleAccept = async (id: string) => {
+    // Call API to update status to accepted
+    try {
+      const response = await fetch(`/api/lesson-requests/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: "accepted" }),
+      });
+      if (response.ok) {
+        const updated = await response.json();
+        setSolicitations(
+          solicitations.map((s) =>
+            s.id === id ? { ...s, status: updated.status } : s
+          )
+        );
+      }
+    } catch (error) {
+      console.error("Failed to accept solicitation", error);
+    }
   };
 
-  const handleReject = (id: string) => {
-    setSolicitations(
-      solicitations.map((s) => (s.id === id ? { ...s, status: "rejected" } : s))
-    );
+  const handleReject = async (id: string) => {
+    // Call API to update status to rejected
+    try {
+      const response = await fetch(`/api/lesson-requests/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: "rejected" }),
+      });
+      if (response.ok) {
+        const updated = await response.json();
+        setSolicitations(
+          solicitations.map((s) =>
+            s.id === id ? { ...s, status: updated.status } : s
+          )
+        );
+      }
+    } catch (error) {
+      console.error("Failed to reject solicitation", error);
+    }
   };
 
-  const handleSaveProfile = (updatedUser: typeof user) => {
-    setUser(updatedUser);
+  const handleSaveProfile = async (updatedUser: UserProfile) => {
+    try {
+      const tokenUser = getUserFromToken();
+      if (!tokenUser) return;
+
+      const userId = tokenUser.userId;
+      const response = await fetch(`/api/users/${userId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedUser),
+      });
+
+      if (response.ok) {
+        setUser(updatedUser);
+      } else {
+        console.error("Failed to save profile");
+      }
+    } catch (error) {
+      console.error("Error saving profile:", error);
+    }
   };
 
   const { logout } = useAuth();
   const handleNow = () => {
-    console.log(user);
+    if (user) {
+      console.log(user);
+    }
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div className="text-red-600">Error: {error}</div>;
+  }
 
   return (
     <div className="flex min-h-screen bg-gray-100">
@@ -105,7 +215,7 @@ export default function MonitorDashboard() {
         <div>
           <div className="flex items-center space-x-3 mb-10 mt-10">
             <div>
-              <p className="font-bold text-gray-800">{user.name}</p>
+              <p className="font-bold text-gray-800">{user?.name}</p>
               <button onClick={() => handleNow()}>
                 <p className="text-sm text-gray-500">Monitor</p>
               </button>
@@ -158,7 +268,7 @@ export default function MonitorDashboard() {
 
       {/* Main content */}
       <main className="flex-1 p-8">
-        {activeTab === "perfil" && (
+        {activeTab === "perfil" && user && (
           <div>
             <h2 className="text-2xl font-semibold mb-6">Editar Perfil</h2>
             <ProfileEdit user={user} onSave={handleSaveProfile} />
@@ -205,7 +315,7 @@ export default function MonitorDashboard() {
             <div className="mb-8">
               <h3 className="text-xl font-semibold mb-4">Concluídas</h3>
               <div className="grid gap-4 md:grid-cols-2">
-                {mockLessons
+                {lessons
                   .filter((l) => l.status === "completed")
                   .map((lesson) => (
                     <LessonCard key={lesson.id} lesson={lesson} />
@@ -215,7 +325,7 @@ export default function MonitorDashboard() {
 
             <h3 className="text-xl font-semibold mb-4">Agendadas</h3>
             <div className="grid gap-4 md:grid-cols-2">
-              {mockLessons
+              {lessons
                 .filter((l) => l.status === "scheduled")
                 .map((lesson) => (
                   <LessonCard key={lesson.id} lesson={lesson} />

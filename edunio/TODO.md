@@ -1,10 +1,17 @@
-# TODO: Fix "Cannot convert undefined or null to object" error in app/student/page.tsx
+# TODO for Updating Mentor Dashboard with Real Data
 
-## Steps Completed:
+- [ ] Update app/mentor/dashboard/page.tsx to fetch real data instead of using mock data:
+  - Fetch mentor user profile from API using user ID from token.
+  - Fetch pending lesson requests for mentor from lesson-requests API.
+  - Fetch lessons for mentor from lessons API.
+  - Replace mockSolicitations, mockLessons, and mockUser with fetched data in state.
+  - Remove mock data constants from the file.
+- [ ] Test the dashboard to ensure real data is displayed correctly.
+- [ ] Verify that accept/reject actions update the backend and UI properly.
+- [ ] Verify profile editing saves changes to backend.
+- [ ] Perform any necessary error handling and loading states.
 
-- [x] Update app/student/page.tsx to handle user state properly from token
-- [x] Add loading state and conditional rendering to prevent passing null user to ProfileEdit
-- [x] Ensure user object has required fields with defaults
-- [x] Add null check in ProfileEdit as safeguard
-- [x] Test the fix by simulating invalid token scenarios (conceptually: invalid token will redirect to login, preventing null user)
-- [x] Verify profile edit works without errors (conceptually: with proper user object and null checks, no conversion error)
+Next steps:
+
+- Implement the above changes step-by-step.
+- Test after implementation.

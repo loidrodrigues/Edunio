@@ -1,8 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
-import { useParams } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import {
   Star,
@@ -13,97 +13,49 @@ import {
   Users,
   CheckCircle,
 } from "lucide-react";
-
-const monitors = [
-  // ... seus mentores (mesmo array que você já tinha)
-  {
-    id: 1,
-    name: "Ana Souza",
-    avatar:
-      "https://93cf30e14ffe27bbc170-56f4a41899529a041b24911e6894a309.ssl.cf1.rackcdn.com/store54/produtos/4759/retrato-profissional-20210412-171840-442.jpg", // imagem do mentor
-    subjects: ["Matemática", "Álgebra", "Cálculo"], // matérias que domina
-    description:
-      "Professora de Matemática com 5 anos de experiência em ensino superior e monitorias online.",
-    rating: 4.8, // nota média
-    reviews: 12, // número de avaliações
-    pricePerHour: 50, // preço por hora em reais
-    availability: {
-      monday: ["10:00", "14:00"],
-      wednesday: ["09:00", "18:00"],
-      friday: ["08:00", "12:00"],
-    },
-    education: "Licenciatura em Matemática - Universidade XYZ",
-    experience: "5 anos como professora universitária e monitorias online",
-    contactEmail: "ana@edunio.com.br",
-  },
-  {
-    id: 2,
-    name: "Bruno Lima",
-    avatar:
-      "https://93cf30e14ffe27bbc170-56f4a41899529a041b24911e6894a309.ssl.cf1.rackcdn.com/store54/produtos/4759/retrato-perfil-profissional-pacote-10-fotos-20241009-172129-294.jpg",
-    subjects: ["Programação", "Desenvolvimento Web", "JavaScript"],
-    description:
-      "Desenvolvedor Full-Stack com experiência em mentorias para estudantes de TI.",
-    rating: 4.9,
-    reviews: 20,
-    pricePerHour: 70,
-    availability: {
-      tuesday: ["14:00", "18:00"],
-      thursday: ["10:00", "16:00"],
-    },
-    education: "Bacharel em Ciência da Computação - Universidade ABC",
-    experience: "3 anos como desenvolvedor e mentor de programação",
-    contactEmail: "bruno@edunio.com.br",
-  },
-  {
-    id: 3,
-    name: "Carla Mendes",
-    avatar:
-      "https://evorastudio.com.br/wp-content/uploads/2021/04/retrato-corporativo-foto-perfil-profissional-foto-linkedin-24-scaled.jpg",
-    subjects: ["Física", "Química"],
-    description:
-      "Engenheira Química com experiência em monitorias para ensino médio e superior.",
-    rating: 4.7,
-    reviews: 15,
-    pricePerHour: 60,
-    availability: {
-      monday: ["09:00", "12:00"],
-      wednesday: ["13:00", "17:00"],
-      friday: ["10:00", "14:00"],
-    },
-    education: "Engenharia Química - Universidade DEF",
-    experience: "4 anos como professora e mentora",
-    contactEmail: "carla@edunio.com.br",
-  },
-  {
-    id: 4,
-    name: "Diego Santos",
-    avatar:
-      "https://storage.alboom.ninja/sites/1348/albuns/956272/retrato_corporativo___retrato_profissional___diego_rocha_fotografo___foto_de_perfil_profissional___retrato_para_linkedin__030.jpg?t=1643996070",
-    subjects: ["História", "Geografia"],
-    description:
-      "Historiador com paixão por ensinar e ajudar estudantes a entender o passado.",
-    rating: 4.6,
-    reviews: 10,
-    pricePerHour: 45,
-    availability: {
-      tuesday: ["10:00", "15:00"],
-      thursday: ["09:00", "13:00"],
-    },
-    education: "História - Universidade GHI",
-    experience: "5 anos como professor e monitor",
-    contactEmail: "diego@edunio.com.br",
-  },
-];
+import { useAuth } from "../../hooks/useAuth";
+import LessonRequestForm from "../../components/LessonRequestForm";
 
 export default function MentorDetail() {
   const params = useParams();
-  const mentorId = Number(params.id);
-  const mentor = monitors.find((m) => m.id === mentorId);
+  const router = useRouter();
+  const { isAuthenticated, user, loading } = useAuth();
+  const mentorId = params.id as string;
 
-  const [showContactSuccess, setShowContactSuccess] = useState(false);
+  const [mentor, setMentor] = useState<any>(null);
+  const [loadingMentor, setLoadingMentor] = useState(true);
+  const [error, setError] = useState("");
+  const [showRequestForm, setShowRequestForm] = useState(false);
 
-  if (!mentor) {
+  useEffect(() => {
+    async function fetchMentor() {
+      try {
+        const response = await fetch(`/api/users/${mentorId}`);
+        if (!response.ok) {
+          throw new Error("Mentor not found");
+        }
+        const data = await response.json();
+        setMentor(data);
+      } catch (err) {
+        setError((err as Error).message);
+      } finally {
+        setLoadingMentor(false);
+      }
+    }
+    if (mentorId) {
+      fetchMentor();
+    }
+  }, [mentorId]);
+
+  if (loadingMentor) {
+    return (
+      <div className="min-h-screen flex justify-center items-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-900"></div>
+      </div>
+    );
+  }
+
+  if (error || !mentor) {
     return (
       <div className="min-h-screen flex justify-center items-center p-6">
         <div className="text-center">
@@ -165,27 +117,42 @@ export default function MentorDetail() {
                 <Book className="text-amber-500" size={16} /> Matérias:
               </div>
               <div className="flex flex-wrap gap-2">
-                {mentor.subjects.map((subject, idx) => (
-                  <span
-                    key={idx}
-                    className="bg-blue-50 text-amber-500 text-sm px-3 py-1 rounded-full"
-                  >
-                    {subject}
-                  </span>
-                ))}
+                {mentor.subjects
+                  ?.split(",")
+                  .map((subject: string, idx: number) => (
+                    <span
+                      key={idx}
+                      className="bg-blue-50 text-amber-500 text-sm px-3 py-1 rounded-full"
+                    >
+                      {subject.trim()}
+                    </span>
+                  ))}
               </div>
             </div>
 
-            <button
-              onClick={() => setShowContactSuccess(true)}
-              className="mt-6 w-full bg-amber-500 text-white py-3 rounded-lg font-semibold hover:bg-amber-600 transition-colors"
-            >
-              Contratar Mentor
-            </button>
-
-            {showContactSuccess && (
-              <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg text-amber-600 text-center">
-                Contato enviado para {mentor.contactEmail} com sucesso!
+            {isAuthenticated && user && !mentor.isMentor ? (
+              <>
+                <button
+                  onClick={() => setShowRequestForm(!showRequestForm)}
+                  className="mt-6 w-full bg-amber-500 text-white py-3 rounded-lg font-semibold hover:bg-amber-600 transition-colors"
+                >
+                  {showRequestForm ? "Cancelar" : "Solicitar Aula"}
+                </button>
+                {showRequestForm && (
+                  <div className="mt-4">
+                    <LessonRequestForm
+                      mentorId={mentorId}
+                      studentId={user.id}
+                      onRequestSent={() => setShowRequestForm(false)}
+                    />
+                  </div>
+                )}
+              </>
+            ) : (
+              <div>
+                <p className="mt-6 text-gray-600">
+                  Faça login como aluno para solicitar aulas.
+                </p>
               </div>
             )}
           </div>
@@ -214,14 +181,14 @@ export default function MentorDetail() {
               <h3 className="font-semibold text-gray-800">Horarios</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="flex flex-col gap-1 text-gray-600 text-sm mt-1">
-                  {Object.entries(mentor.availability).map(
-                    ([day, hours], idx) => (
-                      <span key={idx} className="flex gap-2 items-center">
-                        <CheckCircle size={16} className="text-amber-500" />{" "}
-                        {day}: {hours.join(" - ")}
-                      </span>
-                    )
-                  )}
+                  {Object.entries(
+                    mentor.availability as Record<string, string[]>
+                  ).map(([day, hours], idx) => (
+                    <span key={idx} className="flex gap-2 items-center">
+                      <CheckCircle size={16} className="text-amber-500" /> {day}
+                      : {hours}
+                    </span>
+                  ))}
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-800">Preço</h3>
@@ -238,8 +205,7 @@ export default function MentorDetail() {
                 Contato
               </h2>
               <p className="text-gray-700 flex items-center gap-2">
-                <Mail className="text-amber-500" size={16} />{" "}
-                {mentor.contactEmail}
+                <Mail className="text-amber-500" size={16} /> {mentor.email}
               </p>
             </div>
           </div>

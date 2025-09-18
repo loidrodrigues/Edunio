@@ -33,7 +33,9 @@ export default function MonitorCard({ monitor }: any) {
 
         <p className="flex items-center gap-2 text-gray-600 text-sm">
           <Book size={16} className="text-amber-500" />
-          {monitor.subjects.join(", ")}
+          {Array.isArray(monitor.subjects)
+            ? monitor.subjects.join(", ")
+            : monitor.subjects}
         </p>
 
         <p className="flex items-center gap-2 text-gray-600 text-sm font-semibold">
@@ -43,7 +45,7 @@ export default function MonitorCard({ monitor }: any) {
       </div>
 
       {/* Botão */}
-      <Link href={`/mentor/${monitor.id}`}>
+      <Link href={`/mentor/${monitor._id}`}>
         <button className="mt-4 w-full  border border-amber-500 text-gray-900 p-2 font-semibold rounded-lg hover:bg-amber-500 hover:text-white cursor-pointer transition-colors">
           Ver Detalhes
         </button>
