@@ -1,6 +1,17 @@
 import { useState } from "react";
+import {
+  User,
+  Mail,
+  Image as ImageIcon,
+  BookOpen,
+  FileText,
+  GraduationCap,
+  Briefcase,
+  DollarSign,
+  Calendar,
+} from "lucide-react";
 
-interface User {
+interface UserProfile {
   name: string;
   email: string;
   avatar: string;
@@ -21,11 +32,13 @@ interface User {
 }
 
 interface ProfileEditProps {
-  user: User;
-  onSave: (updatedUser: User) => void;
+  user: UserProfile;
+  onSave: (updatedUser: UserProfile) => void;
 }
 
 export default function ProfileEdit({ user, onSave }: ProfileEditProps) {
+  if (!user) return <div>Loading...</div>;
+
   const [formData, setFormData] = useState(user);
 
   const handleChange = (
@@ -48,100 +61,143 @@ export default function ProfileEdit({ user, onSave }: ProfileEditProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div>
-        <label>Nome:</label>
-        <input
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-          className="border p-2 w-full"
-        />
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-6 bg-white p-6 rounded-xl shadow-md"
+    >
+      {/* Seção: Dados Pessoais */}
+      <h2 className="text-xl font-semibold text-gray-800 flex items-center gap-2">
+        <User className="w-5 h-5 text-blue-600" /> Dados Pessoais
+      </h2>
+      <div className="grid md:grid-cols-2 gap-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            Nome
+          </label>
+          <input
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            className="border p-2 w-full rounded focus:ring-2 focus:ring-blue-400"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            Email
+          </label>
+          <input
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            className="border p-2 w-full rounded focus:ring-2 focus:ring-blue-400"
+          />
+        </div>
+        <div className="md:col-span-2">
+          <label className="block text-sm font-medium text-gray-700 flex items-center gap-2">
+            <ImageIcon className="w-4 h-4" /> Avatar URL
+          </label>
+          <input
+            name="avatar"
+            value={formData.avatar}
+            onChange={handleChange}
+            className="border p-2 w-full rounded focus:ring-2 focus:ring-blue-400"
+          />
+        </div>
       </div>
-      <div>
-        <label>Email:</label>
-        <input
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          className="border p-2 w-full"
-        />
+
+      {/* Seção: Profissional */}
+      <h2 className="text-xl font-semibold text-gray-800 flex items-center gap-2 mt-6">
+        <Briefcase className="w-5 h-5 text-green-600" /> Perfil Profissional
+      </h2>
+      <div className="grid md:grid-cols-2 gap-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            Matérias
+          </label>
+          <input
+            name="subjects"
+            value={formData.subjects}
+            onChange={handleChange}
+            className="border p-2 w-full rounded focus:ring-2 focus:ring-green-400"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            Formação
+          </label>
+          <input
+            name="education"
+            value={formData.education}
+            onChange={handleChange}
+            className="border p-2 w-full rounded focus:ring-2 focus:ring-green-400"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            Experiência
+          </label>
+          <input
+            name="experience"
+            value={formData.experience}
+            onChange={handleChange}
+            className="border p-2 w-full rounded focus:ring-2 focus:ring-green-400"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 flex items-center gap-2">
+            <DollarSign className="w-4 h-4" /> Preço por Hora
+          </label>
+          <input
+            name="pricePerHour"
+            value={formData.pricePerHour}
+            onChange={handleChange}
+            className="border p-2 w-full rounded focus:ring-2 focus:ring-green-400"
+          />
+        </div>
+        <div className="md:col-span-2">
+          <label className="block text-sm font-medium text-gray-700 flex items-center gap-2">
+            <FileText className="w-4 h-4" /> Descrição
+          </label>
+          <textarea
+            name="description"
+            value={formData.description}
+            onChange={handleChange}
+            className="border p-2 w-full rounded focus:ring-2 focus:ring-green-400"
+          />
+        </div>
       </div>
-      <div>
-        <label>Avatar URL:</label>
-        <input
-          name="avatar"
-          value={formData.avatar}
-          onChange={handleChange}
-          className="border p-2 w-full"
-        />
-      </div>
-      <div>
-        <label>Matérias:</label>
-        <input
-          name="subjects"
-          value={formData.subjects}
-          onChange={handleChange}
-          className="border p-2 w-full"
-        />
-      </div>
-      <div>
-        <label>Descrição:</label>
-        <textarea
-          name="description"
-          value={formData.description}
-          onChange={handleChange}
-          className="border p-2 w-full"
-        />
-      </div>
-      <div>
-        <label>Formação:</label>
-        <input
-          name="education"
-          value={formData.education}
-          onChange={handleChange}
-          className="border p-2 w-full"
-        />
-      </div>
-      <div>
-        <label>Experiência:</label>
-        <input
-          name="experience"
-          value={formData.experience}
-          onChange={handleChange}
-          className="border p-2 w-full"
-        />
-      </div>
-      <div>
-        <label>Preço por Hora:</label>
-        <input
-          name="pricePerHour"
-          value={formData.pricePerHour}
-          onChange={handleChange}
-          className="border p-2 w-full"
-        />
-      </div>
-      <div>
-        <label>Disponibilidade:</label>
+
+      {/* Seção: Disponibilidade */}
+      <h2 className="text-xl font-semibold text-gray-800 flex items-center gap-2 mt-6">
+        <Calendar className="w-5 h-5 text-purple-600" /> Disponibilidade
+      </h2>
+      <div className="grid md:grid-cols-2 gap-4">
         {Object.keys(formData.availability).map((day) => (
           <div key={day}>
-            <label>{day.charAt(0).toUpperCase() + day.slice(1)}:</label>
+            <label className="block text-sm font-medium text-gray-700">
+              {day.charAt(0).toUpperCase() + day.slice(1)}
+            </label>
             <input
               value={
                 formData.availability[day as keyof typeof formData.availability]
               }
               onChange={(e) => handleAvailabilityChange(day, e.target.value)}
-              className="border p-2 w-full"
+              className="border p-2 w-full rounded focus:ring-2 focus:ring-purple-400"
+              placeholder="Ex: 09:00-17:00"
             />
           </div>
         ))}
       </div>
-      <button
-        type="submit"
-        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-      >
-        Salvar
-      </button>
+
+      {/* Botão */}
+      <div className="flex justify-end">
+        <button
+          type="submit"
+          className="bg-amber-500 text-white px-6 py-2 rounded-md hover:bg-amber-600 cursor-pointer transition"
+        >
+          Salvar Alterações
+        </button>
+      </div>
     </form>
   );
 }

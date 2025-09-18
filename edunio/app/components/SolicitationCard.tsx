@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { User, Mail, BookOpen, Calendar, MessageSquare } from "lucide-react";
 
 interface Solicitation {
   id: string;
@@ -36,35 +37,47 @@ export default function SolicitationCard({
   };
 
   return (
-    <div className="border p-4 rounded shadow-sm bg-white">
-      <p>
-        <strong>Aluno:</strong> {solicitation.studentName}
-      </p>
-      <p>
-        <strong>Email:</strong> {solicitation.studentEmail}
-      </p>
-      <p>
-        <strong>Matéria:</strong> {solicitation.subject}
-      </p>
-      <p>
-        <strong>Data/Hora:</strong>{" "}
-        {new Date(solicitation.dateTime).toLocaleString()}
-      </p>
-      <p>
-        <strong>Mensagem:</strong> {solicitation.message}
-      </p>
-      <div className="mt-4 flex gap-2">
+    <div className="border border-gray-300 bg-white rounded-md shadow-md p-6 transition hover:shadow-lg">
+      {/* Nome e Matéria */}
+      <div className="flex justify-between items-center mb-4">
+        <h3 className="text-xl font-semibold text-gray-800 flex items-center gap-2">
+          <User className="w-5 h-5 text-blue-600" />
+          {solicitation.studentName}
+        </h3>
+        <span className="text-sm px-3 py-1 rounded-full bg-blue-100 text-blue-700 font-medium">
+          {solicitation.subject}
+        </span>
+      </div>
+
+      {/* Informações */}
+      <div className="space-y-2 text-gray-700 text-sm">
+        <p className="flex items-center gap-2">
+          <Mail className="w-4 h-4 text-gray-500" />
+          <span>{solicitation.studentEmail}</span>
+        </p>
+        <p className="flex items-center gap-2">
+          <Calendar className="w-4 h-4 text-gray-500" />
+          <span>{new Date(solicitation.dateTime).toLocaleString()}</span>
+        </p>
+        <p className="flex items-center gap-2">
+          <MessageSquare className="w-4 h-4 text-gray-500" />
+          <span>{solicitation.message}</span>
+        </p>
+      </div>
+
+      {/* Ações */}
+      <div className="mt-6 flex gap-3">
         <button
           onClick={handleAccept}
           disabled={loading}
-          className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 disabled:opacity-50"
+          className="flex-1 bg-green-500 cursor-pointer text-white py-2 rounded-md font-medium hover:bg-green-600 disabled:opacity-50 transition"
         >
           Aceitar
         </button>
         <button
           onClick={handleReject}
           disabled={loading}
-          className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 disabled:opacity-50"
+          className="flex-1 bg-red-500 cursor-pointer text-white py-2 rounded-md font-medium hover:bg-red-600 disabled:opacity-50 transition"
         >
           Recusar
         </button>

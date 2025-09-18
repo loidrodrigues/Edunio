@@ -6,6 +6,7 @@ import { useAuth } from "../../hooks/useAuth";
 import SolicitationCard from "../../components/SolicitationCard";
 import LessonCard from "../../components/LessonCard";
 import ProfileEdit from "../../components/ProfileEdit";
+import { User, ClipboardList, BookOpen, LogOut } from "lucide-react";
 
 const mockSolicitations = [
   {
@@ -44,7 +45,7 @@ const mockLessons = [
 ];
 
 const mockUser = {
-  name: "Monitor Exemplo",
+  name: "Ricardo Manuel",
   email: "monitor@example.com",
   avatar: "/lo.png",
   subjects: "Matemática, Física",
@@ -65,7 +66,7 @@ const mockUser = {
 
 export default function MonitorDashboard() {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState("perfil");
+  const [activeTab, setActiveTab] = useState("solicitacoes");
   const [solicitations, setSolicitations] = useState(mockSolicitations);
   const [user, setUser] = useState(mockUser);
 
@@ -80,7 +81,6 @@ export default function MonitorDashboard() {
     setSolicitations(
       solicitations.map((s) => (s.id === id ? { ...s, status: "accepted" } : s))
     );
-    // TODO: Create lesson from request
   };
 
   const handleReject = (id: string) => {
@@ -91,108 +91,139 @@ export default function MonitorDashboard() {
 
   const handleSaveProfile = (updatedUser: typeof user) => {
     setUser(updatedUser);
-    // TODO: Save to API
   };
 
   const { logout } = useAuth();
+  const handleNow = () => {
+    console.log(user);
+  };
 
   return (
-    <div className="p-8 max-w-6xl mx-auto">
-      <h1 className="text-3xl font-bold mb-6 flex justify-between items-center">
-        Dashboard do Monitor
+    <div className="flex min-h-screen bg-gray-100">
+      {/* Sidebar */}
+      <aside className="w-64 bg-white shadow-lg p-6 flex flex-col justify-between">
+        <div>
+          <div className="flex items-center space-x-3 mb-10 mt-10">
+            <div>
+              <p className="font-bold text-gray-800">{user.name}</p>
+              <button onClick={() => handleNow()}>
+                <p className="text-sm text-gray-500">Monitor</p>
+              </button>
+            </div>
+          </div>
+          <nav className="space-y-2">
+            <button
+              onClick={() => setActiveTab("solicitacoes")}
+              className={`flex items-center w-full px-4 py-2 rounded-md text-left ${
+                activeTab === "solicitacoes"
+                  ? "bg-amber-500 text-white"
+                  : "text-gray-700 hover:bg-gray-100"
+              }`}
+            >
+              <ClipboardList className="w-5 h-5 mr-2" /> Solicitações
+            </button>
+            <button
+              onClick={() => setActiveTab("historico")}
+              className={`flex items-center w-full px-4 py-2 rounded-md text-left ${
+                activeTab === "historico"
+                  ? "bg-amber-500 text-white"
+                  : "text-gray-700 hover:bg-gray-100"
+              }`}
+            >
+              <BookOpen className="w-5 h-5 mr-2" /> Histórico
+            </button>
+            <button
+              onClick={() => setActiveTab("perfil")}
+              className={`flex items-center w-full px-4 py-2 rounded-md text-left ${
+                activeTab === "perfil"
+                  ? "bg-amber-500 text-white"
+                  : "text-gray-700 hover:bg-gray-100"
+              }`}
+            >
+              <User className="w-5 h-5 mr-2" /> Perfil e Conta
+            </button>
+          </nav>
+        </div>
+
         <button
           onClick={() => {
             logout();
             router.push("/login");
           }}
-          className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+          className="flex items-center px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg"
         >
-          Sair
+          <LogOut className="w-5 h-5 mr-2" /> Sair
         </button>
-      </h1>
+      </aside>
 
-      <div className="flex space-x-4 mb-6">
-        <button
-          onClick={() => setActiveTab("perfil")}
-          className={`px-4 py-2 rounded ${
-            activeTab === "perfil" ? "bg-blue-500 text-white" : "bg-gray-200"
-          }`}
-        >
-          Perfil e Conta
-        </button>
-        <button
-          onClick={() => setActiveTab("solicitacoes")}
-          className={`px-4 py-2 rounded ${
-            activeTab === "solicitacoes"
-              ? "bg-blue-500 text-white"
-              : "bg-gray-200"
-          }`}
-        >
-          Solicitações de Aula
-        </button>
-        <button
-          onClick={() => setActiveTab("historico")}
-          className={`px-4 py-2 rounded ${
-            activeTab === "historico" ? "bg-blue-500 text-white" : "bg-gray-200"
-          }`}
-        >
-          Histórico de Aulas
-        </button>
-      </div>
+      {/* Main content */}
+      <main className="flex-1 p-8">
+        {activeTab === "perfil" && (
+          <div>
+            <h2 className="text-2xl font-semibold mb-6">Editar Perfil</h2>
+            <ProfileEdit user={user} onSave={handleSaveProfile} />
 
-      {activeTab === "perfil" && (
-        <div>
-          <h2 className="text-2xl font-semibold mb-4">Editar Perfil</h2>
-          <ProfileEdit user={user} onSave={handleSaveProfile} />
-          <h2 className="text-2xl font-semibold mb-4 mt-8">Avaliações</h2>
-          <p>Avaliações mock: 4.5 estrelas (10 avaliações)</p>
-          <h2 className="text-2xl font-semibold mb-4 mt-8">
-            Configurações de Conta
-          </h2>
-          <p>Configurações mock: Notificações por email ativadas.</p>
-        </div>
-      )}
+            <div className="mt-10">
+              <h3 className="text-xl font-semibold mb-4">Avaliações</h3>
+              <div className="bg-white rounded-lg shadow p-4">
+                Avaliações mock: ⭐ 4.5 (10 avaliações)
+              </div>
+            </div>
 
-      {activeTab === "solicitacoes" && (
-        <div>
-          <h2 className="text-2xl font-semibold mb-4">
-            Solicitações Recebidas
-          </h2>
-          <div className="space-y-4">
-            {solicitations
-              .filter((s) => s.status === "pending")
-              .map((solicitation) => (
-                <SolicitationCard
-                  key={solicitation.id}
-                  solicitation={solicitation}
-                  onAccept={handleAccept}
-                  onReject={handleReject}
-                />
-              ))}
+            <div className="mt-10">
+              <h3 className="text-xl font-semibold mb-4">Configurações</h3>
+              <div className="bg-white rounded-lg shadow p-4">
+                Notificações por email: ativadas
+              </div>
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {activeTab === "historico" && (
-        <div>
-          <h2 className="text-2xl font-semibold mb-4">Aulas Realizadas</h2>
-          <div className="space-y-4">
-            {mockLessons
-              .filter((l) => l.status === "completed")
-              .map((lesson) => (
-                <LessonCard key={lesson.id} lesson={lesson} />
-              ))}
+        {activeTab === "solicitacoes" && (
+          <div>
+            <h2 className="text-2xl font-semibold mb-6 text-gray-700">
+              Solicitações de Aula
+            </h2>
+            <div className="grid gap-4 md:grid-cols-2">
+              {solicitations
+                .filter((s) => s.status === "pending")
+                .map((solicitation) => (
+                  <SolicitationCard
+                    key={solicitation.id}
+                    solicitation={solicitation}
+                    onAccept={handleAccept}
+                    onReject={handleReject}
+                  />
+                ))}
+            </div>
           </div>
-          <h2 className="text-2xl font-semibold mb-4 mt-8">Aulas Futuras</h2>
-          <div className="space-y-4">
-            {mockLessons
-              .filter((l) => l.status === "scheduled")
-              .map((lesson) => (
-                <LessonCard key={lesson.id} lesson={lesson} />
-              ))}
+        )}
+
+        {activeTab === "historico" && (
+          <div>
+            <h2 className="text-2xl font-semibold mb-6 text-gray-700">Aulas</h2>
+            <div className="mb-8">
+              <h3 className="text-xl font-semibold mb-4">Concluídas</h3>
+              <div className="grid gap-4 md:grid-cols-2">
+                {mockLessons
+                  .filter((l) => l.status === "completed")
+                  .map((lesson) => (
+                    <LessonCard key={lesson.id} lesson={lesson} />
+                  ))}
+              </div>
+            </div>
+
+            <h3 className="text-xl font-semibold mb-4">Agendadas</h3>
+            <div className="grid gap-4 md:grid-cols-2">
+              {mockLessons
+                .filter((l) => l.status === "scheduled")
+                .map((lesson) => (
+                  <LessonCard key={lesson.id} lesson={lesson} />
+                ))}
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </main>
     </div>
   );
 }
