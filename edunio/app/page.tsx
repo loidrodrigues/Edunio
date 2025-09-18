@@ -24,11 +24,12 @@ import Beneficio from "./components/Beneficio";
 import CallToActionStudent from "./components/CallToActionStudent";
 import Depoimentos from "./components/Depoimentos";
 import { useAuth } from "./hooks/useAuth";
+import { IUser } from "../models/User";
 
 export default function Home() {
   const { isAuthenticated, user, loading } = useAuth();
 
-  const [monitors, setMonitors] = useState([]);
+  const [monitors, setMonitors] = useState<IUser[]>([]);
   const [loadingMonitors, setLoadingMonitors] = useState(true);
 
   useEffect(() => {

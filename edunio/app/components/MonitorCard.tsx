@@ -1,8 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Star, Book, Clock } from "lucide-react";
+import { IUser } from "../../models/User";
 
-export default function MonitorCard({ monitor }: any) {
+export default function MonitorCard({ monitor }: { monitor: IUser }) {
   return (
     <div className="bg-white shadow-lg rounded-xl p-6 flex flex-col justify-between h-full hover:shadow-xl transition-shadow">
       {/* Topo: avatar + nome + avaliação */}

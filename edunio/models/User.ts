@@ -58,4 +58,30 @@ const UserSchema = new mongoose.Schema(
   }
 );
 
+export interface IUser {
+  _id: string;
+  name: string;
+  email: string;
+  isMentor: boolean;
+  avatar: string;
+  subjects: string;
+  description: string;
+  education: string;
+  experience: string;
+  pricePerHour: string;
+  availability: {
+    monday: string;
+    tuesday: string;
+    wednesday: string;
+    thursday: string;
+    friday: string;
+    saturday: string;
+    sunday: string;
+  };
+  rating: number;
+  reviews: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export default mongoose.models.User || mongoose.model("User", UserSchema);
