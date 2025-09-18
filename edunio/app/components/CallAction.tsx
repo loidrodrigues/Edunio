@@ -11,7 +11,7 @@ export default function CallAction() {
           Crie sua conta, compartilhe seu conhecimento e comece a ensinar hoje
           mesmo!
         </p>
-        <button className="bg-amber-500 text-white font-semibold px-4 py-3 rounded-lg hover:bg-gray-100 transition-colors shadow-md">
+        <button className="bg-amber-500 text-white font-semibold px-4 py-3 rounded-lg hover:bg-amber-600 cursor-pointer transition-colors shadow-md">
           Seja um monitor
         </button>
       </div>

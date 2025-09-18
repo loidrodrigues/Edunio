@@ -13,9 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Edunio",
+  title: "Edunio – A sua conexão com o saber",
   description:
-    "Uma plataforma que conecta estudantes e mentores para aulas particulares",
+    "Uma plataforma que conecta estudantes e mentores especializados em diversas áreas do conhecimento.",
 };
 
 import Nav from "./components/Nav";
@@ -32,6 +32,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Nav />
+
         {children}
         <Footer />
       </body>

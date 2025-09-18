@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-
+import { useAuth } from "../hooks/useAuth";
 interface LoginErrors {
   email: string;
   password: string;
@@ -18,6 +18,7 @@ export default function Login() {
     password: "",
   });
   const router = useRouter();
+  const { login } = useAuth();
 
   const validate = (): boolean => {
     const newErrors: LoginErrors = {
@@ -61,8 +62,11 @@ export default function Login() {
       const data = await res.json();
 
       if (data.success) {
-        localStorage.setItem("token", data.token);
-        router.push("/");
+        login(data.token);
+
+        // Redireciona e força refresh da página
+        window.location.href = "/";
+
         setEmail("");
         setPassword("");
       } else {

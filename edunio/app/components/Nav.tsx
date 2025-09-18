@@ -1,28 +1,35 @@
 "use client";
 
 import Link from "next/link";
-import { isLoggedIn } from "../../lib/jwt";
-import { useEffect, useState } from "react";
+import { useAuth } from "../hooks/useAuth";
 import logo from "../../public/logo1.png";
+import { User } from "lucide-react";
+import { useEffect, useState } from "react";
 
 export default function Nav() {
-  const [loggedIn, setLoggedIn] = useState(false);
-  console.log("User logged in:", loggedIn);
+  const { isAuthenticated, logout } = useAuth();
+  const [forceUpdate, setForceUpdate] = useState(0);
 
   useEffect(() => {
-    setLoggedIn(isLoggedIn());
+    const handleAuthChange = () => {
+      setForceUpdate((prev) => prev + 1);
+    };
+
+    window.addEventListener("authStateChanged", handleAuthChange);
+    return () =>
+      window.removeEventListener("authStateChanged", handleAuthChange);
   }, []);
 
   return (
     <nav className="bg-white text-gray-900 shadow-md">
-      <div className="flex justify-between items-center p-6 px-12">
+      <div className="flex justify-between items-center p-6 px-16">
         <div>
           <Link href="/">
             <img src={logo.src} alt="Edunio Logo" className="h-10 w-auto" />
           </Link>
         </div>
 
-        <ul className="flex space-x-4">
+        <ul className="flex space-x-12">
           <li>
             <Link href="/" className="hover:underline text-md font-bold">
               Início
@@ -48,28 +55,35 @@ export default function Nav() {
           </li>
         </ul>
 
-        <div className="space-x-4">
-          {loggedIn ? (
-            <Link
-              href="/monitor/profile"
-              className=" text-blue-900 px-4 py-2 rounded cursor-pointer hover:text-amber-500 transition-all duration-300 "
-            >
-              Perfil
-            </Link>
+        <div className="flex items-center gap-2">
+          {isAuthenticated ? (
+            <div>
+              <Link
+                href="/monitor/profile"
+                className=" text-blue-900 px-4 py-2 rounded cursor-pointer hover:text-amber-500 transition-all duration-300 "
+              >
+                Perfil
+              </Link>
+
+              <button
+                onClick={logout}
+                className=" text-blue-900 px-4 py-2 rounded cursor-pointer hover:text-amber-500 transition-all duration-300 "
+              >
+                Sair
+              </button>
+            </div>
           ) : (
             <>
               <Link
                 href="/login"
-                className=" text-blue-900 px-4 py-2 rounded cursor-pointer hover:text-amber-500 transition-all duration-300 "
+                className="  px-4 py-2 font-semibold rounded cursor-pointer hover:text-amber-500 transition-all duration-300 "
               >
                 Entrar
               </Link>
-              <Link
-                href="/cadastro"
-                className=" bg-blue-900 text-white hover:text-amber-500 px-4 py-2 rounded cursor-pointer transition-all duration-300 "
-              >
-                Criar conta
-              </Link>
+              <div className="inline-flex items-center gap-2 border border-amber-500 text-amber-500 font-semibold px-4 py-2 rounded cursor-pointer hover:text-blue-900 hover:border-blue-900 transition-all duration-300 ">
+                <User />
+                <Link href="/cadastro">Criar conta</Link>
+              </div>
             </>
           )}
         </div>

@@ -1,9 +1,7 @@
 "use client";
 
-import Image from "next/image";
 import { useState, useEffect } from "react";
 import CategoryCard from "./components/CategoryCard";
-
 import {
   Code,
   Palette,
@@ -17,7 +15,7 @@ import {
   Globe,
   Music,
   Camera,
-  MoveRight,
+  ArrowRight,
 } from "lucide-react";
 import Search from "./components/Search";
 import MonitorCard from "./components/MonitorCard";
@@ -25,20 +23,23 @@ import CallAction from "./components/CallAction";
 import Beneficio from "./components/Beneficio";
 import CallToActionStudent from "./components/CallToActionStudent";
 import Depoimentos from "./components/Depoimentos";
+import { useAuth } from "./hooks/useAuth";
 
 export default function Home() {
+  const { isAuthenticated, user, loading } = useAuth();
+
   const monitors = [
     {
       id: 1,
       name: "Ana Souza",
       avatar:
-        "https://93cf30e14ffe27bbc170-56f4a41899529a041b24911e6894a309.ssl.cf1.rackcdn.com/store54/produtos/4759/retrato-profissional-20210412-171840-442.jpg", // imagem do mentor
-      subjects: ["Matemática", "Álgebra", "Cálculo"], // matérias que domina
+        "https://93cf30e14ffe27bbc170-56f4a41899529a041b24911e6894a309.ssl.cf1.rackcdn.com/store54/produtos/4759/retrato-profissional-20210412-171840-442.jpg",
+      subjects: ["Matemática", "Álgebra", "Cálculo"],
       description:
         "Professora de Matemática com 5 anos de experiência em ensino superior e monitorias online.",
-      rating: 4.8, // nota média
-      reviews: 12, // número de avaliações
-      pricePerHour: 50, // preço por hora em reais
+      rating: 4.8,
+      reviews: 12,
+      pricePerHour: 50,
       availability: {
         monday: ["10:00", "14:00"],
         wednesday: ["09:00", "18:00"],
@@ -201,10 +202,19 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
+  // Mostrar loading enquanto verifica autenticação
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-900"></div>
+      </div>
+    );
+  }
+
   return (
-    <div className="flex flex-col  justify-between px-28 py-24  ">
+    <div className="flex flex-col justify-between px-28 py-24">
       <div>
-        <div className="flex flex-col  gap-2 mb-8">
+        <div className="flex flex-col gap-2 mb-8">
           <h1
             className="text-5xl w-3/5 font-extrabold text-gray-800 transition-opacity duration-500"
             style={{ opacity: opacity }}
@@ -220,26 +230,27 @@ export default function Home() {
           </p>
           <div className="mt-4 flex gap-4">
             <button className="bg-amber-500 text-white font-semibold flex gap-2 cursor-pointer px-4 py-3 rounded-lg hover:bg-amber-600 transition-colors">
-              <MoveRight /> Ser um monitor
+              <ArrowRight /> Ser um monitor
             </button>
-            <button className="text-md font-semibold cursor-pointer px-4 py-3 hover:text-amber-500 transition-colors">
-              Seja um aluno
-            </button>
+            {!isAuthenticated && (
+              <button className="text-md font-semibold cursor-pointer px-4 py-3 hover:text-amber-500 transition-colors">
+                Seja um aluno
+              </button>
+            )}
           </div>
         </div>
       </div>
-      {
-        /* Categories Section */
-        <div className="gap-4 mt-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 bg-amber-100/50 p-12 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
-          {category.map((cat, index) => (
-            <CategoryCard key={index} category={cat} />
-          ))}
-        </div>
-      }
+
+      {/* Categories Section */}
+      <div className="gap-4 mt-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 bg-amber-100/50 p-12 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
+        {category.map((cat, index) => (
+          <CategoryCard key={index} category={cat} />
+        ))}
+      </div>
 
       <Search />
-      <div className=" flex justify-between mt-20 items-center ">
-        <div className="flex flex-col  gap-1">
+      <div className="flex justify-between mt-20 items-center">
+        <div className="flex flex-col gap-1">
           <h1 className="text-2xl font-extrabold text-gray-800">
             Encontre um{" "}
             <span className="text-amber-500 italic font-light">mentor</span>
@@ -248,11 +259,13 @@ export default function Home() {
             Veja os monitores disponíveis na plataforma
           </p>
         </div>
-        <button className="text-white  px-3 py-2 rounded-md  bg-blue-900">
+        <button className="text-gray-900 items-center hover:bg-amber-500 hover:text-white flex gap-2 transition-colors cursor-pointer font-semibold border border-amber-500 px-3 py-2 rounded-md">
+          <ArrowRight size={16} className="w-8" />
           ver todos
         </button>
       </div>
-      <div className="bg-gray-100  p-6 mt-12">
+
+      <div className="bg-gray-100 p-6 mt-12">
         {/* Monitor Cards Section */}
         <section className="my-12 grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {monitors.map((monitor) => (
@@ -265,7 +278,8 @@ export default function Home() {
       <Beneficio />
       <CallToActionStudent />
       <Depoimentos />
-      <div className="  mb-2 mt-24">
+
+      <div className="mb-2 mt-24">
         <h1 className="text-xl md:text-2xl mb-2 font-extrabold text-gray-800">
           Vem com a{" "}
           <span className="text-amber-500 italic font-light">Edunio</span>
@@ -274,9 +288,16 @@ export default function Home() {
           Aprenda com quem realmente entende do assunto e alcance seus objetivos
           de forma prática e personalizada.
         </p>
-        <button className="mt-4 bg-amber-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-amber-600 transition-colors shadow-md">
-          <a href="/cadastro">Criar conta</a>
-        </button>
+
+        {!isAuthenticated ? (
+          <button className="mt-4 bg-amber-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-amber-600 transition-colors shadow-md">
+            <a href="/cadastro">Criar conta</a>
+          </button>
+        ) : (
+          <button className="mt-4 bg-blue-900 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-800 transition-colors shadow-md">
+            <a href="/monitor/profile">Acessar meu perfil</a>
+          </button>
+        )}
       </div>
     </div>
   );
