@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../hooks/useAuth";
+import Image from "next/image";
+import logo from "../../public/logo1.png";
 interface LoginErrors {
   email: string;
   password: string;
@@ -83,15 +85,10 @@ export default function Login() {
     <div className="flex justify-center items-center py-30 ">
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-6 rounded shadow-md w-1/3"
+        className="bg-white p-6 rounded shadow-lg w-[400px] "
       >
-        <div className="mb-12">
-          <h1 className="text-5xl font-extrabold text-gray-800 text-center">
-            Edu<span className="text-amber-500 italic font-light">nio</span>
-          </h1>
-        </div>
-        <h2 className="text-xl mb-6 font-bold text-gray-800">
-          Entrar na sua{" "}
+        <h2 className="text-4xl mb-8 mr-20 font-bold text-gray-800">
+          Entra na sua{" "}
           <span className="text-amber-500 italic font-light">conta</span>.
         </h2>
         {error && <p className="text-red-500 mb-4">{error}</p>}
@@ -136,7 +133,7 @@ export default function Login() {
         <div className="mb-2"></div>
         <button
           type="submit"
-          className="w-full bg-blue-900 text-white p-2 rounded hover:bg-blue-800 transition-colors"
+          className="w-full border bg-amber-500  border-amber-500 text-white  p-2 rounded hover:bg-amber-600 hover:text-white cursor-pointer transition-colors"
           disabled={loading}
         >
           {loading ? "Entrando..." : "Entrar"}
