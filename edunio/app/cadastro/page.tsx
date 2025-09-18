@@ -519,7 +519,7 @@ export default function Register() {
         {/* Botão */}
         <button
           type="submit"
-          className="w-full bg-blue-900 text-white p-2 rounded hover:bg-blue-800 transition-colors"
+          className="w-full bg-amber-500 text-white p-2 rounded hover:bg-amber-600 transition-colors"
           disabled={loading}
         >
           {loading ? "Cadastrando..." : "Cadastrar"}

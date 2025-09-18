@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { useAuth } from "../hooks/useAuth";
+import { getUserFromToken } from "../../lib/jwt";
 import logo from "../../public/logo1.png";
-import { User } from "lucide-react";
+import { User, LayoutDashboard } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export default function Nav() {
@@ -19,6 +20,15 @@ export default function Nav() {
     return () =>
       window.removeEventListener("authStateChanged", handleAuthChange);
   }, []);
+
+  const getDashboardPath = () => {
+    const user = getUserFromToken();
+    if (user && user.isMentor) {
+      return "/mentor/dashboard";
+    } else {
+      return "/student";
+    }
+  };
 
   return (
     <nav className="bg-white text-gray-900 shadow-md">
@@ -36,7 +46,10 @@ export default function Nav() {
             </Link>
           </li>
           <li>
-            <Link href="/monitor" className="hover:underline text-md font-bold">
+            <Link
+              href="/landingpage"
+              className="hover:underline text-md font-bold"
+            >
               Seja um monitor
             </Link>
           </li>
@@ -57,21 +70,17 @@ export default function Nav() {
 
         <div className="flex items-center gap-2">
           {isAuthenticated ? (
-            <div>
-              <Link
-                href="/monitor/profile"
-                className=" text-blue-900 px-4 py-2 rounded cursor-pointer hover:text-amber-500 transition-all duration-300 "
-              >
-                Dashboard
-              </Link>
-
-              <button
-                onClick={logout}
-                className=" text-blue-900 px-4 py-2 rounded cursor-pointer hover:text-amber-500 transition-all duration-300 "
-              >
-                Sair
+            <Link
+              href={getDashboardPath()}
+              className=" text-gray-900 border border-amber-500 font-semibold px-4 py-2 rounded cursor-pointer hover:text-amber-600 transition-all duration-300 "
+            >
+              <button>
+                <div className="flex items-center cursor-pointer">
+                  <LayoutDashboard className="inline-block w-4 h-4 mr-2 cursor-pointer" />
+                  <p className="cursor-pointer">Minha Area</p>
+                </div>
               </button>
-            </div>
+            </Link>
           ) : (
             <>
               <Link
@@ -80,10 +89,15 @@ export default function Nav() {
               >
                 Entrar
               </Link>
-              <div className="inline-flex items-center gap-2 border border-amber-500 text-amber-500 font-semibold px-4 py-2 rounded cursor-pointer hover:text-blue-900 hover:border-blue-900 transition-all duration-300 ">
-                <User />
-                <Link href="/cadastro">Criar conta</Link>
-              </div>
+              <Link
+                href="/cadastro"
+                className="inline-flex items-center gap-2 border border-amber-500 text-amber-500 font-semibold px-4 py-2 rounded cursor-pointer hover:text-blue-900 hover:border-blue-900 transition-all duration-300 "
+              >
+                <div className="flex items-center cursor-pointer gap-2">
+                  <User />
+                  Criar conta
+                </div>
+              </Link>
             </>
           )}
         </div>

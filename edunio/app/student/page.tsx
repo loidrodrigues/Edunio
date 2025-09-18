@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { getUserFromToken } from "../../lib/jwt";
+import { useAuth } from "../hooks/useAuth";
 import LessonCard from "../components/LessonCard";
 import RatingForm from "../components/RatingForm";
 import ProfileEdit from "../components/ProfileEdit";
@@ -93,9 +94,22 @@ export default function StudentPage() {
     // TODO: Submit rating
   };
 
+  const { logout } = useAuth();
+
   return (
     <div className="p-8 max-w-6xl mx-auto">
-      <h1 className="text-3xl font-bold mb-6">Área do Aluno</h1>
+      <h1 className="text-3xl font-bold mb-6 flex justify-between items-center">
+        Área do Aluno
+        <button
+          onClick={() => {
+            logout();
+            router.push("/login");
+          }}
+          className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+        >
+          Sair
+        </button>
+      </h1>
 
       <div className="flex space-x-4 mb-6">
         <button
