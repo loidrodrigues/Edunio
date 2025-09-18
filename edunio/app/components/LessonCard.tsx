@@ -23,7 +23,7 @@ interface LessonCardProps {
 export default function LessonCard({ lesson }: LessonCardProps) {
   const statusConfig: Record<
     string,
-    { label: string; color: string; icon: JSX.Element }
+    { label: string; color: string; icon: React.ReactElement }
   > = {
     completed: {
       label: "Concluída",
