@@ -9,18 +9,16 @@ export default function CallAction() {
     <div className=" text-gray-800 p-8  mt-24 mb-4 flex flex-col md:flex-row items-center justify-center gap-4 ">
       {/* Texto */}
       <div className="flex-1 text-center  ">
-        <h1 className="text-xl md:text-5xl font-bold mb-3 w-1/3 mx-auto">
+        <h1 className="text-xl md:text-5xl font-bold mb-3  mx-auto">
           {!isAuthenticated ? (
             <>
-              Quer se tornar um{" "}
-              <span className="text-amber-500 italic font-light">monitor</span>?
+              Quer se tornar um <span className="text-amber-500 ">monitor</span>
+              ?
             </>
           ) : (
             <>
               Bem-vindo de volta,{" "}
-              <span className="text-amber-500 italic font-light">
-                {user?.name || "Monitor"}
-              </span>
+              <span className="text-amber-500 ">{user?.name || "Monitor"}</span>
               !
             </>
           )}

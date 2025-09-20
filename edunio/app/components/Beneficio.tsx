@@ -30,8 +30,7 @@ export default function Beneficio() {
     <div className="mt-24">
       <div className="flex flex-col gap-2 mb-8">
         <h1 className="text-2xl font-extrabold text-gray-800">
-          Por que escolher a{" "}
-          <span className="text-amber-500 italic font-light">Edunio</span>?
+          Por que escolher a <span className="text-amber-500 ">Edunio</span>?
         </h1>
         <p className="text-gray-600">
           Descubra os benefícios de aprender com nossos mentores especializados.

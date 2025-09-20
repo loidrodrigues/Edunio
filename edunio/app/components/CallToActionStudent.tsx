@@ -4,8 +4,7 @@ export default function CallToActionStudent() {
       {/* Texto */}
       <div className="flex-1">
         <h1 className="text-xl md:text-5xl font-bold mb-3">
-          Pronto para{" "}
-          <span className="text-amber-600 italic font-light">aprender</span>?
+          Pronto para <span className="text-amber-500">aprender</span>?
         </h1>
         <p className="text-md md:text-md mb-4">
           Encontre mentores qualificados e acelere seu aprendizado hoje mesmo!

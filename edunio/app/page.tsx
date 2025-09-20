@@ -165,10 +165,8 @@ export default function Home() {
           </h1>
           <p className="text-lg text-gray-500 ">
             Na Edunio, você encontra mentores que{" "}
-            <span className="text-amber-500 italic font-light">
-              ajudam você a evoluir
-            </span>{" "}
-            no seu ritmo.
+            <span className="text-amber-500 ">ajudam você a evoluir</span> no
+            seu ritmo.
           </p>
           <div className="mt-4 flex gap-4">
             <button className="bg-amber-500 text-white font-semibold flex gap-2 cursor-pointer px-4 py-3 rounded-lg hover:bg-amber-600 transition-colors">
@@ -197,8 +195,7 @@ export default function Home() {
       <div className="flex justify-between mt-20 items-center">
         <div className="flex flex-col gap-1">
           <h1 className="text-2xl font-extrabold text-gray-800">
-            Encontre um{" "}
-            <span className="text-amber-500 italic font-light">mentor</span>
+            Encontre um <span className="text-amber-500 ">mentor</span>
           </h1>
           <p className="text-lg text-gray-500">
             Veja os monitores disponíveis na plataforma
@@ -233,8 +230,7 @@ export default function Home() {
 
       <div className="mb-2 mt-24">
         <h1 className="text-xl md:text-2xl mb-2 font-extrabold text-gray-800">
-          Vem com a{" "}
-          <span className="text-amber-500 italic font-light">Edunio</span>
+          Vem com a <span className="text-amber-500 ">Edunio</span>
         </h1>
         <p className="text-lg md:text-xl text-gray-600 max-w-2xl">
           Aprenda com quem realmente entende do assunto e alcance seus objetivos
