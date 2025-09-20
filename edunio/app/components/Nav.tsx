@@ -55,15 +55,16 @@ export default function Nav() {
           </li>
           <li>
             <Link
-              href="/contactos"
+              href="/mentores"
               className="hover:underline text-md font-bold"
             >
-              Contactos
+              Ver Mentores
             </Link>
           </li>
+
           <li>
             <Link href="/sobre" className="hover:underline text-md font-bold">
-              Como funciona?
+              Sobre a Edunio
             </Link>
           </li>
         </ul>

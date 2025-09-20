@@ -1,9 +1,9 @@
 export default function CallToActionStudent() {
   return (
-    <div className="border border-gray-200 text-gray-800  p-8 rounded-xl mt-24 mb-8 flex flex-col md:flex-row items-center gap-4 shadow-lg">
+    <div className="border text-center  border-gray-200 text-gray-800  p-8 rounded-xl mt-32 mb-24 flex flex-col md:flex-row items-center gap-4">
       {/* Texto */}
       <div className="flex-1">
-        <h1 className="text-xl md:text-2xl font-bold mb-1">
+        <h1 className="text-xl md:text-5xl font-bold mb-3">
           Pronto para{" "}
           <span className="text-amber-600 italic font-light">aprender</span>?
         </h1>

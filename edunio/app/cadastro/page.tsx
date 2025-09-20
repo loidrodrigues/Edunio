@@ -232,14 +232,9 @@ export default function Register() {
     <div className="flex justify-center items-center py-20">
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-6 rounded shadow-md w-1/3"
+        className="bg-white p-6 rounded shadow-md w-1/5"
       >
-        <div className="mb-12">
-          <h1 className="text-5xl font-extrabold text-gray-800 text-center">
-            Edu<span className="text-amber-500 italic font-light">nio</span>
-          </h1>
-        </div>
-        <h2 className="text-2xl mb-6 font-bold text-gray-800">
+        <h2 className="text-4xl mb-6 font-bold text-gray-800">
           Crie sua{" "}
           <span className="text-amber-500 italic font-light">conta</span>.
         </h2>

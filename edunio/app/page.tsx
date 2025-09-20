@@ -234,15 +234,9 @@ export default function Home() {
           de forma prática e personalizada.
         </p>
 
-        {!isAuthenticated ? (
-          <button className="mt-4 bg-amber-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-amber-600 transition-colors shadow-md">
-            <a href="/cadastro">Criar conta</a>
-          </button>
-        ) : (
-          <button className="mt-4 bg-blue-900 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-800 transition-colors shadow-md">
-            <a href="/monitor/profile">Acessar meu perfil</a>
-          </button>
-        )}
+        <button className="mt-4 bg-amber-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-amber-600 transition-colors shadow-md">
+          <a href="/cadastro">Criar conta</a>
+        </button>
       </div>
     </div>
   );

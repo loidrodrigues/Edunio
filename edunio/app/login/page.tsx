@@ -85,7 +85,7 @@ export default function Login() {
     <div className="flex justify-center items-center py-30 ">
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-6 rounded shadow-lg w-[400px] "
+        className="bg-white p-6 rounded shadow-lg w-1/5 "
       >
         <h2 className="text-4xl mb-8 mr-20 font-bold text-gray-800">
           Entra na sua{" "}

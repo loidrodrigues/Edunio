@@ -164,6 +164,16 @@ export default function BecomeMonitor() {
         </div>
       </section>
       */}
+      <div className="text-center mb-12 mt-24">
+        <h1 className="text-5xl font-bold text-gray-800 mb-4">
+          Seja um <span className="text-amber-500">Mentor</span>
+        </h1>
+        <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+          Compartilhe sua experiência e ajude estudantes a alcançarem seus
+          objetivos. Cadastre-se como mentor e faça parte de uma comunidade que
+          transforma vidas.
+        </p>
+      </div>
 
       {/* Stats Section */}
       <section className="py-16 bg-gray-50">
