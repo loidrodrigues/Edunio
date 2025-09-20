@@ -164,8 +164,8 @@ export default function BecomeMonitor() {
         </div>
       </section>
       */}
-      <div className="text-center mb-12 mt-24">
-        <h1 className="text-5xl font-bold text-gray-800 mb-4">
+      <div className="text-center mb-12 mt-16">
+        <h1 className="text-4xl font-bold text-gray-800 mb-4">
           Seja um <span className="text-amber-500">Mentor</span>
         </h1>
         <p className="text-gray-600 text-lg max-w-2xl mx-auto">
@@ -308,24 +308,8 @@ export default function BecomeMonitor() {
             vidas através da educação
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            {!isAuthenticated ? (
-              <a
-                href="/cadastro?tipo=monitor"
-                className="bg-amber-500 text-white hover:bg-amber-600 font-bold px-4 py-3 rounded-md text-md transition-colors flex items-center justify-center gap-2"
-              >
-                Quero ser monitor <ArrowRight />
-              </a>
-            ) : (
-              <a
-                href="/monitor/profile-setup"
-                className="bg-white text-gray-800 hover:bg-gray-100 font-bold px-4 py-2 rounded-md text-md transition-colors flex items-center justify-center gap-2"
-              >
-                <p className="text-md">Completar meu perfil</p>{" "}
-                <ArrowRight className="w-4 h-4" />
-              </a>
-            )}
             <a
-              href="/monitores"
+              href="/mentores"
               className="border-2 text-gray-800 hover:bg-white hover:text-blue-900  font-bold px-4 py-2 rounded-lg text-md  transition-colors"
             >
               Ver monitores

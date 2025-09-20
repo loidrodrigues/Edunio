@@ -25,6 +25,7 @@ import CallToActionStudent from "./components/CallToActionStudent";
 import Depoimentos from "./components/Depoimentos";
 import { useAuth } from "./hooks/useAuth";
 import { IUser } from "../models/User";
+import Link from "next/link";
 
 export default function Home() {
   const { isAuthenticated, user, loading } = useAuth();
@@ -174,9 +175,12 @@ export default function Home() {
               <ArrowRight /> Ser um monitor
             </button>
             {!isAuthenticated && (
-              <button className="text-md font-semibold cursor-pointer px-4 py-3 hover:text-amber-500 transition-colors">
-                Seja um aluno
-              </button>
+              <Link
+                href="/login"
+                className="text-md font-semibold cursor-pointer px-4 py-3 hover:text-amber-500 transition-colors"
+              >
+                <button>Seja um aluno</button>
+              </Link>
             )}
           </div>
         </div>
@@ -200,10 +204,13 @@ export default function Home() {
             Veja os monitores disponíveis na plataforma
           </p>
         </div>
-        <button className="text-gray-900 items-center hover:bg-amber-500 hover:text-white flex gap-2 transition-colors cursor-pointer font-semibold border border-amber-500 px-3 py-2 rounded-md">
+        <Link
+          href="/mentores"
+          className="text-gray-900 items-center hover:bg-amber-500 hover:text-white flex gap-2 transition-colors cursor-pointer font-semibold border border-amber-500 px-3 py-2 rounded-md"
+        >
           <ArrowRight size={16} className="w-8" />
           ver todos
-        </button>
+        </Link>
       </div>
 
       <div className="bg-gray-100 p-6 mt-12">

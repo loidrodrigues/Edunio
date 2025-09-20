@@ -47,24 +47,24 @@ export default function Nav() {
           </li>
           <li>
             <Link
-              href="/landingpage"
-              className="hover:underline text-md font-bold"
-            >
-              Seja um monitor
-            </Link>
-          </li>
-          <li>
-            <Link
               href="/mentores"
               className="hover:underline text-md font-bold"
             >
               Ver Mentores
             </Link>
           </li>
+          <li>
+            <Link
+              href="/landingpage"
+              className="hover:underline text-md font-bold"
+            >
+              Seja um monitor
+            </Link>
+          </li>
 
           <li>
             <Link href="/sobre" className="hover:underline text-md font-bold">
-              Sobre a Edunio
+              Princípios e Valores
             </Link>
           </li>
         </ul>
