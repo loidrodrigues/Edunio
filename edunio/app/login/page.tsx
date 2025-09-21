@@ -88,8 +88,7 @@ export default function Login() {
         className="bg-white p-6 rounded shadow-lg w-1/5 "
       >
         <h2 className="text-4xl mb-8 mr-20 font-bold text-gray-800">
-          Entra na sua{" "}
-          <span className="text-amber-500 italic font-light">conta</span>.
+          Entra na sua <span className="text-amber-500 ">conta</span>.
         </h2>
         {error && <p className="text-red-500 mb-4">{error}</p>}
         <div className="flex flex-col gap-2">

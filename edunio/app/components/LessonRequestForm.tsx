@@ -4,13 +4,13 @@ import { useState } from "react";
 
 interface LessonRequestFormProps {
   mentorId: string;
-  studentId: string;
+  studentId?: string;
   onRequestSent: () => void;
 }
 
 export default function LessonRequestForm({
   mentorId,
-  studentId,
+  studentId = "guest",
   onRequestSent,
 }: LessonRequestFormProps) {
   const [subject, setSubject] = useState("");

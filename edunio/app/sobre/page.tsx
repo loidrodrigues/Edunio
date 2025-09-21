@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Target,
   Users,
@@ -10,8 +12,11 @@ import {
   Star,
 } from "lucide-react";
 import Link from "next/link";
+import { useAuth } from "../hooks/useAuth";
 
 export default function Sobre() {
+  const { isAuthenticated } = useAuth();
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
@@ -254,28 +259,50 @@ export default function Sobre() {
       <section className="py-14  bg-amber-500">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-4xl font-extrabold text-white mb-6">
-            Junte-se à Nossa Missão
+            {isAuthenticated
+              ? "Continue Sua Jornada"
+              : "Junte-se à Nossa Missão"}
           </h2>
           <p className="text-md text-amber-100 mb-8 max-w-3xl mx-auto">
-            Seja você um estudante em busca de conhecimento ou um especialista
-            querendo compartilhar sua expertise, há um lugar para você na
-            Edunio.
+            {isAuthenticated
+              ? "Acesse sua área pessoal e continue evoluindo com a Edunio."
+              : "Seja você um estudante em busca de conhecimento ou um especialista querendo compartilhar sua expertise, há um lugar para você na Edunio."}
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              href="/cadastro"
-              className="bg-white text-amber-600 font-semibold px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors flex items-center justify-center gap-2"
-            >
-              Começar Agora
-              <ArrowRight className="w-5 h-5" />
-            </Link>
-            <Link
-              href="/mentores"
-              className="border-2 border-white text-white font-semibold px-4 py-2 rounded-lg hover:bg-white hover:text-amber-600 transition-colors"
-            >
-              Conhecer Mentores
-            </Link>
+            {isAuthenticated ? (
+              <>
+                <Link
+                  href="/student"
+                  className="bg-white text-amber-600 font-semibold px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors flex items-center justify-center gap-2"
+                >
+                  Acessar Minha Área
+                  <ArrowRight className="w-5 h-5" />
+                </Link>
+                <Link
+                  href="/mentores"
+                  className="border-2 border-white text-white font-semibold px-4 py-2 rounded-lg hover:bg-white hover:text-amber-600 transition-colors"
+                >
+                  Encontrar Mentor
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link
+                  href="/cadastro"
+                  className="bg-white text-amber-600 font-semibold px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors flex items-center justify-center gap-2"
+                >
+                  Começar Agora
+                  <ArrowRight className="w-5 h-5" />
+                </Link>
+                <Link
+                  href="/mentores"
+                  className="border-2 border-white text-white font-semibold px-4 py-2 rounded-lg hover:bg-white hover:text-amber-600 transition-colors"
+                >
+                  Conhecer Mentores
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </section>

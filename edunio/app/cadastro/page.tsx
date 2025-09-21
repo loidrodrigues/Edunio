@@ -235,8 +235,7 @@ export default function Register() {
         className="bg-white p-6 rounded shadow-md w-1/5"
       >
         <h2 className="text-4xl mb-6 font-bold text-gray-800">
-          Crie sua{" "}
-          <span className="text-amber-500 italic font-light">conta</span>.
+          Crie sua <span className="text-amber-500">conta</span>.
         </h2>
         {error && <p className="text-red-500 mb-4">{error}</p>}
 

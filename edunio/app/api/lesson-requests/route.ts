@@ -32,15 +32,14 @@ export async function POST(request: NextRequest) {
   try {
     await connectMongo();
 
-    const { studentId, mentorId, subject, dateTime, message } =
-      await request.json();
+    const { studentId, mentorId, message } = await request.json();
 
     const newRequest = new LessonRequest({
       student: studentId,
       mentor: mentorId,
-      subject,
-      dateTime,
-      message,
+      subject: null,
+      dateTime: null,
+      message: message || "",
     });
 
     await newRequest.save();

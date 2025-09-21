@@ -236,10 +236,6 @@ export default function Home() {
           Aprenda com quem realmente entende do assunto e alcance seus objetivos
           de forma prática e personalizada.
         </p>
-
-        <button className="mt-4 bg-amber-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-amber-600 transition-colors shadow-md">
-          <a href="/cadastro">Criar conta</a>
-        </button>
       </div>
     </div>
   );

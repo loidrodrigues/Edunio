@@ -7,6 +7,7 @@ export interface User {
   id: string;
   email: string;
   name: string;
+  isMentor?: boolean;
 }
 
 export function useAuth() {
@@ -29,6 +30,7 @@ export function useAuth() {
               "",
             email: (decoded as any).email || "",
             name: (decoded as any).name || "",
+            isMentor: (decoded as any).isMentor || false,
           });
         } else {
           localStorage.removeItem("token");

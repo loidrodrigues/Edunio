@@ -14,11 +14,13 @@ const LessonRequestSchema = new mongoose.Schema(
     },
     subject: {
       type: String,
-      required: true,
+      required: false,
+      default: null,
     },
     dateTime: {
       type: Date,
-      required: true,
+      required: false,
+      default: null,
     },
     message: {
       type: String,

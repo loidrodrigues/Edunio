@@ -14,7 +14,6 @@ import {
   CheckCircle,
 } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
-import LessonRequestForm from "../../components/LessonRequestForm";
 
 export default function MentorDetail() {
   const params = useParams();
@@ -25,7 +24,43 @@ export default function MentorDetail() {
   const [mentor, setMentor] = useState<any>(null);
   const [loadingMentor, setLoadingMentor] = useState(true);
   const [error, setError] = useState("");
-  const [showRequestForm, setShowRequestForm] = useState(false);
+  const [message, setMessage] = useState("");
+  const [requestLoading, setRequestLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!message.trim()) return;
+
+    setRequestLoading(true);
+    setError("");
+    setSuccess(false);
+
+    try {
+      const response = await fetch("/api/lesson-requests", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          studentId: user?.id,
+          mentorId: mentorId,
+          message: message.trim(),
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Falha ao enviar solicitação");
+      }
+
+      setSuccess(true);
+      setMessage("");
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setRequestLoading(false);
+    }
+  };
 
   useEffect(() => {
     async function fetchMentor() {
@@ -35,6 +70,10 @@ export default function MentorDetail() {
           throw new Error("Mentor not found");
         }
         const data = await response.json();
+        console.log("Mentor data:", data);
+        console.log("Mentor isMentor:", data.isMentor, typeof data.isMentor);
+        console.log("User data:", user);
+        console.log("User isMentor:", user?.isMentor, typeof user?.isMentor);
         setMentor(data);
       } catch (err) {
         setError((err as Error).message);
@@ -45,7 +84,7 @@ export default function MentorDetail() {
     if (mentorId) {
       fetchMentor();
     }
-  }, [mentorId]);
+  }, [mentorId, user]);
 
   if (loadingMentor) {
     return (
@@ -130,23 +169,59 @@ export default function MentorDetail() {
               </div>
             </div>
 
-            {isAuthenticated && user && !mentor.isMentor ? (
+            {(() => {
+              // Don't show form while loading
+              if (loading || loadingMentor) {
+                return false;
+              }
+
+              // Must be authenticated and have user data
+              if (!isAuthenticated || !user) {
+                return false;
+              }
+
+              // User must be a student (not a mentor)
+              const userIsMentor = user.isMentor;
+              const isUserMentor = Boolean(userIsMentor) === true;
+
+              console.log("=== USER TYPE DEBUG ===");
+              console.log("userIsMentor:", userIsMentor, typeof userIsMentor);
+              console.log("isUserMentor:", isUserMentor);
+
+              return !isUserMentor;
+            })() ? (
               <>
-                <button
-                  onClick={() => setShowRequestForm(!showRequestForm)}
-                  className="mt-6 w-full bg-amber-500 text-white py-3 rounded-lg font-semibold hover:bg-amber-600 transition-colors"
-                >
-                  {showRequestForm ? "Cancelar" : "Solicitar Aula"}
-                </button>
-                {showRequestForm && (
-                  <div className="mt-4">
-                    <LessonRequestForm
-                      mentorId={mentorId}
-                      studentId={user.id}
-                      onRequestSent={() => setShowRequestForm(false)}
-                    />
+                {success && (
+                  <div className="mt-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded-md">
+                    Solicitação enviada com sucesso!
                   </div>
                 )}
+                <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+                  <div>
+                    <label
+                      htmlFor="message"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
+                      Mensagem para o mentor
+                    </label>
+                    <textarea
+                      id="message"
+                      value={message}
+                      onChange={(e) => setMessage(e.target.value)}
+                      required
+                      rows={4}
+                      className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                      placeholder="Escreva sua mensagem ou dúvida para o mentor..."
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    disabled={requestLoading || !message.trim()}
+                    className="w-full bg-amber-500 text-white py-3 rounded-lg font-semibold hover:bg-amber-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  >
+                    {requestLoading ? "Enviando..." : "Solicitar Aula"}
+                  </button>
+                </form>
               </>
             ) : (
               <div>

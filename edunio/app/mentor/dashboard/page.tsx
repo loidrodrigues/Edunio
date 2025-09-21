@@ -12,8 +12,6 @@ interface Solicitation {
   id: string;
   studentName: string;
   studentEmail: string;
-  subject: string;
-  dateTime: string;
   message: string;
   status: string;
 }
@@ -104,8 +102,6 @@ export default function MonitorDashboard() {
           id: req._id,
           studentName: req.student.name,
           studentEmail: req.student.email,
-          subject: req.subject,
-          dateTime: req.dateTime,
           message: req.message,
           status: req.status,
         }));

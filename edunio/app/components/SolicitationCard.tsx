@@ -1,12 +1,10 @@
 import { useState } from "react";
-import { User, Mail, BookOpen, Calendar, MessageSquare } from "lucide-react";
+import { User, Mail, MessageSquare } from "lucide-react";
 
 interface Solicitation {
   id: string;
   studentName: string;
   studentEmail: string;
-  subject: string;
-  dateTime: string;
   message: string;
   status: string;
 }
@@ -38,15 +36,12 @@ export default function SolicitationCard({
 
   return (
     <div className="border border-gray-300 bg-white rounded-md shadow-md p-6 transition hover:shadow-lg">
-      {/* Nome e Matéria */}
-      <div className="flex justify-between items-center mb-4">
+      {/* Nome do Aluno */}
+      <div className="flex items-center mb-4">
         <h3 className="text-xl font-semibold text-gray-800 flex items-center gap-2">
           <User className="w-5 h-5 text-blue-600" />
           {solicitation.studentName}
         </h3>
-        <span className="text-sm px-3 py-1 rounded-full bg-blue-100 text-blue-700 font-medium">
-          {solicitation.subject}
-        </span>
       </div>
 
       {/* Informações */}
@@ -55,14 +50,12 @@ export default function SolicitationCard({
           <Mail className="w-4 h-4 text-gray-500" />
           <span>{solicitation.studentEmail}</span>
         </p>
-        <p className="flex items-center gap-2">
-          <Calendar className="w-4 h-4 text-gray-500" />
-          <span>{new Date(solicitation.dateTime).toLocaleString()}</span>
-        </p>
-        <p className="flex items-center gap-2">
-          <MessageSquare className="w-4 h-4 text-gray-500" />
-          <span>{solicitation.message}</span>
-        </p>
+        <div className="bg-gray-50 p-3 rounded-md">
+          <p className="flex items-start gap-2">
+            <MessageSquare className="w-4 h-4 text-gray-500 mt-0.5 flex-shrink-0" />
+            <span className="text-gray-700">{solicitation.message}</span>
+          </p>
+        </div>
       </div>
 
       {/* Ações */}
