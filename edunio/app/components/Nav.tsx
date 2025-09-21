@@ -38,8 +38,7 @@ export default function Nav() {
             <img src={logo.src} alt="Edunio Logo" className="h-10 w-auto" />
           </Link>
         </div>
-
-        <ul className="flex space-x-12">
+        <ul className="flex space-x-10">
           <li>
             <Link
               href="/"

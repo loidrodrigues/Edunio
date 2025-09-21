@@ -1,62 +1,82 @@
-# TODO - Simplificar Sistema de Solicitação de Aulas
+# Correções Implementadas - Dashboard do Estudante
 
-## Objetivo
+## Problema Identificado
 
-Substituir o LessonRequestForm complexo por um campo de texto simples (SMS) e botão "Solicitar Aula", fazendo com que as solicitações apareçam no dashboard do mentor.
+As solicitações dos alunos não estavam aparecendo no dashboard, mesmo tendo sido criadas, exibindo a mensagem "Nenhuma solicitação encontrada."
 
-## Passos a Executar
+## Causa Raiz
 
-### 1. Modificar MentorDetail (app/mentor/[id]/page.tsx)
+O problema estava na extração incorreta do ID do usuário do token JWT no arquivo `app/student/page.tsx`. O código estava tentando acessar `userFromToken?.id` primeiro, quando na verdade o campo correto no token é `userId`.
 
-- [x] Remover import do LessonRequestForm
-- [x] Remover estado showRequestForm
-- [x] Substituir o componente LessonRequestForm por:
-  - Campo de texto para mensagem/SMS
-  - Botão "Solicitar Aula"
-  - Estados para loading, error e success
-- [x] Implementar função handleSubmit para enviar solicitação
+## Correções Implementadas
 
-### 2. Atualizar Modelo LessonRequest (models/LessonRequest.ts)
+### 1. Correção da Extração do userId
 
-- [x] Tornar campos subject e dateTime opcionais
-- [x] Manter message como campo principal
+**Arquivo:** `app/student/page.tsx`
 
-### 3. Modificar API (app/api/lesson-requests/route.ts)
+- **Antes:** `userFromToken?.id || userFromToken?.userId || userFromToken?.sub`
+- **Depois:** `userFromToken?.userId || userFromToken?.id || userFromToken?.sub`
 
-- [x] Remover validação obrigatória de subject e dateTime
-- [x] Aceitar apenas message no POST
-- [x] Usar valores padrão ou null para campos opcionais
+### 2. Adição de Logs de Debug
 
-### 4. Simplificar SolicitationCard (app/components/SolicitationCard.tsx)
+Adicionados logs detalhados para facilitar a identificação de problemas futuros:
 
-- [x] Remover exibição de subject, dateTime
-- [x] Mostrar apenas studentName, studentEmail e message
-- [x] Ajustar layout para ser mais compacto
+- Log do token completo
+- Log dos campos específicos (userId, id, sub)
+- Log do userId extraído
+- Log dos dados recebidos da API
 
-### 5. Atualizar Dashboard (app/mentor/dashboard/page.tsx)
+### 3. Correção do Estado das Solicitações
 
-- [x] Ajustar interface Solicitation se necessário
-- [x] Verificar se a exibição funciona corretamente
+**Arquivo:** `app/student/page.tsx`
 
-### 6. Corrigir Problema de Autenticação
+- Adicionado `setSolicitations(data)` para garantir que os dados da API sejam salvos no estado
 
-- [x] Identificar que o campo isMentor não estava sendo capturado pelo hook useAuth
-- [x] Atualizar interface User para incluir campo isMentor
-- [x] Modificar hook useAuth para extrair isMentor do token
-- [x] Adicionar logs de debug para identificar problema na condição
-- [x] Corrigir condição de exibição do botão para user.isMentor === false
-- [x] Remover logs de debug após correção
+## Arquivos Modificados
 
-### 7. Testar Fluxo Completo
+- `app/student/page.tsx` - Correção principal e logs de debug
 
-- [x] Testar criação de solicitação no MentorDetail
-- [x] Verificar se aparece no dashboard do mentor
-- [x] Testar aceitar/recusar solicitações
+## Como Testar a Correção
 
-### 8. Sistema Funcional - Pronto para Uso
+1. **Login como estudante:**
 
-- [x] API de criação de solicitações funcionando
-- [x] API de listagem de solicitações funcionando
-- [x] Interface simplificada implementada
-- [x] Autenticação corrigida
-- [x] Banco de dados conectado e operacional
+   - Acesse `/login`
+   - Faça login com uma conta de estudante
+
+2. **Criar uma solicitação:**
+
+   - Acesse o perfil de um mentor
+   - Clique em "Solicitar Aula"
+   - Preencha e envie o formulário
+
+3. **Verificar no dashboard:**
+
+   - Acesse `/student`
+   - Vá para a aba "Minhas Solicitações"
+   - A solicitação deve aparecer na lista
+
+4. **Verificar logs de debug:**
+   - Abra o console do navegador (F12)
+   - Procure pelos logs "=== DEBUG TOKEN STUDENT DASHBOARD ==="
+   - Verifique se o userId está sendo extraído corretamente
+
+## Próximos Passos
+
+1. **Testar a funcionalidade completa:**
+
+   - Criar múltiplas solicitações
+   - Testar diferentes status (pending, accepted, rejected)
+   - Verificar se o mentor consegue ver as solicitações pendentes
+
+2. **Limpar logs de debug (opcional):**
+
+   - Remover os logs de console após confirmar que tudo está funcionando
+   - Manter apenas logs essenciais para produção
+
+3. **Melhorar tratamento de erros:**
+   - Adicionar mais validações
+   - Melhorar mensagens de erro para o usuário
+
+## Status
+
+✅ **CORRIGIDO** - O problema das solicitações não aparecerem no dashboard do estudante foi resolvido.

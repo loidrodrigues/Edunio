@@ -111,19 +111,8 @@ export default function StudentDashboard() {
 
       // Obter o ID do usuário do token
       const userFromToken = getUserFromToken();
-      // Debug: Log do token para identificar problemas
-      console.log("=== DEBUG TOKEN STUDENT DASHBOARD ===");
-      console.log("userFromToken:", userFromToken);
-      console.log("userFromToken.userId:", userFromToken?.userId);
-      console.log("userFromToken.id:", userFromToken?.id);
-      console.log("userFromToken.sub:", userFromToken?.sub);
-
-      
-
       const userId =
-        userFromToken?.userId || userFromToken?.id || userFromToken?.sub;
-
-      console.log("userId extraído:", userId);
+        userFromToken?.id || userFromToken?.userId || userFromToken?.sub;
 
       if (!userId) {
         throw new Error("ID do usuário não encontrado no token");
@@ -137,8 +126,6 @@ export default function StudentDashboard() {
       }
 
       const data = await response.json();
-      console.log("Dados recebidos da API:", data);
-      setSolicitations(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Erro desconhecido");
       console.error("Erro ao carregar solicitações:", err);
