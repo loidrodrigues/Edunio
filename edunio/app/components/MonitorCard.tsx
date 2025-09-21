@@ -5,7 +5,7 @@ import { IUser } from "../../models/User";
 
 export default function MonitorCard({ monitor }: { monitor: IUser }) {
   return (
-    <div className="bg-white shadow-lg rounded-xl p-6 flex flex-col justify-between h-full hover:shadow-xl transition-shadow">
+    <div className="bg-white shadow-md rounded-md p-6 flex flex-col justify-between h-full hover:shadow-xl transition-shadow">
       {/* Topo: avatar + nome + avaliação */}
       <div className="flex items-center gap-4 mb-4">
         <Image

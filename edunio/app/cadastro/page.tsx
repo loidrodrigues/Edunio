@@ -232,7 +232,7 @@ export default function Register() {
     <div className="flex justify-center items-center py-20">
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-6 rounded shadow-md w-1/5"
+        className="bg-white p-6 rounded shadow-md w-[400]"
       >
         <h2 className="text-4xl mb-6 font-bold text-gray-800">
           Crie sua <span className="text-amber-500">conta</span>.

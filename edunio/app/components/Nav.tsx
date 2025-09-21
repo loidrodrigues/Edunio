@@ -41,14 +41,17 @@ export default function Nav() {
 
         <ul className="flex space-x-12">
           <li>
-            <Link href="/" className="hover:underline text-md font-bold">
+            <Link
+              href="/"
+              className="hover:underline text-md font-bold hover:text-amber-500 transition-colors duration-300"
+            >
               Início
             </Link>
           </li>
           <li>
             <Link
               href="/mentores"
-              className="hover:underline text-md font-bold"
+              className="hover:underline text-md font-bold hover:text-amber-500 transition-colors duration-300"
             >
               Ver Mentores
             </Link>
@@ -56,14 +59,17 @@ export default function Nav() {
           <li>
             <Link
               href="/landingpage"
-              className="hover:underline text-md font-bold"
+              className="hover:underline text-md font-bold hover:text-amber-500 transition-colors duration-300"
             >
               Seja um monitor
             </Link>
           </li>
 
           <li>
-            <Link href="/sobre" className="hover:underline text-md font-bold">
+            <Link
+              href="/sobre"
+              className="hover:underline text-md font-bold hover:text-amber-500 transition-colors duration-300"
+            >
               Princípios e Valores
             </Link>
           </li>

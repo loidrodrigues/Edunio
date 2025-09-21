@@ -107,7 +107,7 @@ export default function StudentDashboard() {
   return (
     <div className="flex min-h-screen bg-gray-100">
       {/* Sidebar */}
-      <aside className="w-64 bg-white shadow-lg p-6 flex flex-col justify-between">
+      <aside className="w-64 bg-white p-6 flex flex-col justify-between">
         <div>
           <div className="flex items-center space-x-3 mb-10 mt-10">
             <img
