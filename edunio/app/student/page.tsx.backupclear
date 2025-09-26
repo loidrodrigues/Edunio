@@ -1,0 +1,345 @@
+"use client";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { getUserFromToken } from "../../lib/jwt";
+import { useAuth } from "../hooks/useAuth";
+import LessonCard from "../components/LessonCard";
+import ProfileEdit from "../components/ProfileEdit";
+import { ClipboardList, BookOpen, LogOut } from "lucide-react";
+import {
+  Clock,
+  User,
+  Calendar,
+  MessageSquare,
+  CheckCircle2,
+  XCircle,
+  Hourglass,
+} from "lucide-react";
+
+// --- Interface para Solicitações ---
+interface Solicitation {
+  _id: string;
+  subject: string | null;
+  dateTime: Date | null;
+  message: string;
+  status: "pending" | "accepted" | "rejected";
+  student: {
+    name: string;
+    email: string;
+  };
+  mentor: {
+    name: string;
+    email: string;
+  };
+  createdAt: string;
+  updatedAt: string;
+}
+
+const mockUser = {
+  name: "Aluno Exemplo",
+  email: "aluno@example.com",
+  avatar: "/lo.png",
+  subjects: "",
+  description: "",
+  education: "",
+  experience: "",
+  pricePerHour: "",
+  availability: {
+    monday: "",
+    tuesday: "",
+    wednesday: "",
+    thursday: "",
+    friday: "",
+    saturday: "",
+    sunday: "",
+  },
+};
+
+// --- Página Principal ---
+export default function StudentDashboard() {
+  const router = useRouter();
+  const { logout } = useAuth();
+
+  const [activeTab, setActiveTab] = useState("solicitacoes");
+  const [solicitations, setSolicitations] = useState<Solicitation[]>([]);
+  const [user, setUser] = useState(mockUser);
+  const [loading, setLoading] = useState(true);
+  const [solicitationsLoading, setSolicitationsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const userFromToken = getUserFromToken();
+
+    if (!userFromToken) {
+      router.push("/login");
+      return;
+    }
+
+    if (userFromToken.isMentor) {
+      router.push("/login");
+      return;
+    }
+
+    // Merge token user with defaults
+    const updatedUser = {
+      name: userFromToken.name || mockUser.name,
+      email: userFromToken.email || mockUser.email,
+      avatar: mockUser.avatar,
+      subjects: mockUser.subjects,
+      description: mockUser.description,
+      education: mockUser.education,
+      experience: mockUser.experience,
+      pricePerHour: mockUser.pricePerHour,
+      availability: mockUser.availability,
+    };
+    setUser(updatedUser);
+    setLoading(false);
+  }, [router]);
+
+  const handleSaveProfile = (updatedUser: typeof user) => setUser(updatedUser);
+
+  // Função para carregar solicitações do estudante
+  const loadSolicitations = async () => {
+    try {
+      setSolicitationsLoading(true);
+      setError(null);
+
+      // Usar o hook useAuth para obter o usuário autenticado
+      if (!user || !user.name) {
+        throw new Error("Usuário não autenticado");
+      }
+
+      // Obter o ID do usuário do token
+      const userFromToken = getUserFromToken();
+      // Debug: Log do token para identificar problemas
+      console.log("=== DEBUG TOKEN STUDENT DASHBOARD ===");
+      console.log("userFromToken:", userFromToken);
+      console.log("userFromToken.userId:", userFromToken?.userId);
+      console.log("userFromToken.id:", userFromToken?.id);
+      console.log("userFromToken.sub:", userFromToken?.sub);
+
+      
+
+      const userId =
+        userFromToken?.userId || userFromToken?.id || userFromToken?.sub;
+
+      console.log("userId extraído:", userId);
+
+      if (!userId) {
+        throw new Error("ID do usuário não encontrado no token");
+      }
+
+      const response = await fetch(`/api/lesson-requests?studentId=${userId}`);
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Erro ao carregar solicitações");
+      }
+
+      const data = await response.json();
+      console.log("Dados recebidos da API:", data);
+      setSolicitations(data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Erro desconhecido");
+      console.error("Erro ao carregar solicitações:", err);
+    } finally {
+      setSolicitationsLoading(false);
+    }
+  };
+
+  // Carregar solicitações quando o componente monta e o usuário estiver carregado
+  useEffect(() => {
+    if (!loading && user && user.name) {
+      console.log("Iniciando carregamento de solicitações...");
+      loadSolicitations();
+    }
+  }, [loading, user]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <div className="flex min-h-screen bg-gray-100">
+      {/* Sidebar */}
+      <aside className="w-64 bg-white p-6 flex flex-col justify-between">
+        <div>
+          <div className="flex items-center space-x-3 mb-10 mt-10">
+            <img
+              src={user.avatar}
+              alt={user.name}
+              className="w-12 h-12 rounded-full border"
+            />
+            <div>
+              <p className="font-bold text-gray-800">{user.name}</p>
+              <p className="text-sm text-gray-500">Aluno</p>
+            </div>
+          </div>
+          <nav className="space-y-2">
+            <button
+              onClick={() => setActiveTab("solicitacoes")}
+              className={`flex items-center w-full px-4 py-2 rounded-md text-left ${
+                activeTab === "solicitacoes"
+                  ? "bg-amber-500 text-white"
+                  : "text-gray-700 hover:bg-gray-100"
+              }`}
+            >
+              <ClipboardList className="w-5 h-5 mr-2" /> Minhas Solicitações
+            </button>
+            <button
+              onClick={() => setActiveTab("historico")}
+              className={`flex items-center w-full px-4 py-2 rounded-md text-left ${
+                activeTab === "historico"
+                  ? "bg-amber-500 text-white"
+                  : "text-gray-700 hover:bg-gray-100"
+              }`}
+            >
+              <BookOpen className="w-5 h-5 mr-2" /> Aulas
+            </button>
+            <button
+              onClick={() => setActiveTab("perfil")}
+              className={`flex items-center w-full px-4 py-2 rounded-md text-left ${
+                activeTab === "perfil"
+                  ? "bg-amber-500 text-white"
+                  : "text-gray-700 hover:bg-gray-100"
+              }`}
+            >
+              <User className="w-5 h-5 mr-2" /> Perfil e Conta
+            </button>
+          </nav>
+        </div>
+
+        <button
+          onClick={() => {
+            logout();
+            router.push("/login");
+          }}
+          className="flex items-center px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg"
+        >
+          <LogOut className="w-5 h-5 mr-2" /> Sair
+        </button>
+      </aside>
+
+      {/* Main Content */}
+      <main className="flex-1 p-8">
+        {activeTab === "perfil" && (
+          <div>
+            <h2 className="text-2xl font-semibold mb-6">Editar Perfil</h2>
+            <ProfileEdit user={user} onSave={handleSaveProfile} />
+
+            <div className="mt-10">
+              <h3 className="text-xl font-semibold mb-4">Configurações</h3>
+              <div className="bg-white rounded-lg shadow p-4">
+                Notificações por email: ativadas
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === "solicitacoes" && (
+          <div>
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-semibold text-gray-700">
+                Minhas Solicitações
+              </h2>
+              <div className="flex gap-2">
+                <button
+                  onClick={loadSolicitations}
+                  disabled={solicitationsLoading}
+                  className="px-3 py-1 bg-amber-500 text-white text-sm rounded-md hover:bg-amber-600 disabled:opacity-50"
+                >
+                  {solicitationsLoading ? "Carregando..." : "Recarregar"}
+                </button>
+              </div>
+            </div>
+            {solicitationsLoading ? (
+              <div className="text-center py-8">
+                <p className="text-gray-600">Carregando solicitações...</p>
+              </div>
+            ) : error ? (
+              <div className="text-center py-8">
+                <p className="text-red-600">Erro: {error}</p>
+                <button
+                  onClick={loadSolicitations}
+                  className="mt-2 px-4 py-2 bg-amber-500 text-white rounded-md hover:bg-amber-600"
+                >
+                  Tentar novamente
+                </button>
+              </div>
+            ) : solicitations.length === 0 ? (
+              <div className="text-center py-8">
+                <p className="text-gray-600">Nenhuma solicitação encontrada.</p>
+              </div>
+            ) : (
+              <div className="grid gap-4 md:grid-cols-2">
+                {solicitations.map((s) => (
+                  <div
+                    key={s._id}
+                    className="border border-gray-300 p-4 rounded-lg bg-white shadow-sm"
+                  >
+                    <h3 className="font-bold text-gray-800 mb-2 flex items-center">
+                      <Clock className="w-4 h-4 mr-2 text-gray-500" />
+                      {s.subject || "Sem assunto"}
+                    </h3>
+
+                    <p className="text-sm text-gray-600 flex items-center">
+                      <User className="w-4 h-4 mr-2 text-gray-500" />
+                      Mentor: {s.mentor.name}
+                    </p>
+
+                    {s.dateTime && (
+                      <p className="text-sm text-gray-600 flex items-center">
+                        <Calendar className="w-4 h-4 mr-2 text-gray-500" />
+                        Data/Hora: {new Date(s.dateTime).toLocaleString()}
+                      </p>
+                    )}
+
+                    <p className="text-sm text-gray-600 flex items-center">
+                      <MessageSquare className="w-4 h-4 mr-2 text-gray-500" />
+                      Mensagem: {s.message}
+                    </p>
+
+                    <p
+                      className={`mt-2 font-medium flex items-center ${
+                        s.status === "pending"
+                          ? "text-yellow-600"
+                          : s.status === "accepted"
+                          ? "text-green-600"
+                          : "text-red-600"
+                      }`}
+                    >
+                      {s.status === "pending" && (
+                        <Hourglass className="w-4 h-4 mr-2 text-yellow-600" />
+                      )}
+                      {s.status === "accepted" && (
+                        <CheckCircle2 className="w-4 h-4 mr-2 text-green-600" />
+                      )}
+                      {s.status === "rejected" && (
+                        <XCircle className="w-4 h-4 mr-2 text-red-600" />
+                      )}
+                      Status: {s.status}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {activeTab === "historico" && (
+          <div>
+            <h2 className="text-2xl font-semibold mb-6 text-gray-700">Aulas</h2>
+            <div className="text-center py-8">
+              <p className="text-gray-600">
+                Funcionalidade de aulas em desenvolvimento.
+              </p>
+              <p className="text-sm text-gray-500 mt-2">
+                Em breve você poderá ver suas aulas agendadas e concluídas aqui.
+              </p>
+            </div>
+          </div>
+        )}
+      </main>
+    </div>
+  );
+}
